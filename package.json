@@ -1,0 +1,15 @@
+{
+  "name": "mqtt-smarthome",
+  "version": "0.0.1",
+  "description": "Node library for MQTT-Smarthome",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Simon Christmann <simon@christmann.email>",
+  "license": "ISC",
+  "dependencies": {
+    "mqtt": "^2.14.0",
+    "yalm": "^4.1.0"
+  }
+}
