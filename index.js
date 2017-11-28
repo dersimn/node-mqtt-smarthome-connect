@@ -4,6 +4,7 @@ const Mqtt = require("mqtt");
 class MqttSmarthome extends EventEmitter {
     constructor(mqttUrl, options = {}) {
         super();
+        this.messageCallbacks = {};
 
         this.mqttUrl = mqttUrl || "mqtt://localhost";
         this.clientId = (options.name || "mqttsmarthome") + Math.random().toString(16).substr(2, 8);
@@ -63,11 +64,18 @@ class MqttSmarthome extends EventEmitter {
             }
 
             this.emit("message", topic, payload);
+            for ( var callbackTopic in this.messageCallbacks ) {
+            	//TODO: trigger callback when subscription was /something/# and received topic is /something/subtopic
+            	if ( topic == callbackTopic && this.messageCallbacks[callbackTopic] != null ) {
+            		this.messageCallbacks[callbackTopic](topic, payload);
+            	}
+            }
         });
     }
 
-    subscribe(topic) {
+    subscribe(topic, callback = null) {
         this.mqtt.subscribe(topic);
+        this.messageCallbacks[topic] = callback; 
 
         //TODO: check if we need to resubscribe after reconnect
     }
