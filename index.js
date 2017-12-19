@@ -101,7 +101,11 @@ class MqttSmarthome extends EventEmitter {
     publish(basetopic, data, level = 0) {
         if ( level == 0 ) {
             this.log.debug('mqtt >', basetopic, data);
-            this.mqtt.publish(basetopic, JSON.stringify(data));
+            if ( typeof data === "object" ) {
+                this.mqtt.publish(basetopic, JSON.stringify(data));
+            } else {
+                this.mqtt.publish(basetopic, String(data));
+            }
         } else {
             for ( var datapoint in data ) {
                 if ( typeof data[datapoint] === "object" ) {
