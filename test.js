@@ -21,18 +21,16 @@ mqsh.subscribe("test/+/3/#", (topic, payload) => {
 });
 
 var data = {
-	poweron: true,
-	hsv: {
+	boolean: true,
+	number: 1.515724844534868,
+	string: "alert",
+	object: {
 		hue: 1.0,
 		sat: 1.0,
 		bri: 1.0
 	},
-	ct: {
-		ct: 1.0,
-		bri: 1.0
-	},
-	animation: "alert",
-	stripe: [
+	array: [ 1,2,3,4,5 ],
+	array_of_objects: [
 		{
 			hsv: {
 				hue: 1.0,
