@@ -64,11 +64,29 @@ class MqttSmarthome extends EventEmitter {
             }
 
             this.emit("message", topic, payload);
-            for ( var callbackTopic in this.messageCallbacks ) {
-            	//TODO: trigger callback when subscription was /something/# and received topic is /something/subtopic
-            	if ( topic == callbackTopic && this.messageCallbacks[callbackTopic] != null ) {
-            		this.messageCallbacks[callbackTopic](topic, payload);
-            	}
+            const topicParts = topic.split('/');
+            for ( const callbackTopic in this.messageCallbacks ) {
+                const callbackTopicParts = callbackTopic.split('/');
+
+                var match = true;
+                for (let i = 0; i < callbackTopicParts.length; i++) {
+                    if ( callbackTopicParts[i] == "+" ) {
+                        continue;
+                    }
+                    if ( callbackTopicParts[i] == "#" ) {
+                        break;
+                    }
+
+                    if ( callbackTopicParts[i] == topicParts[i] ) {
+                        match &= true;
+                    } else {
+                        match &= false;
+                    }
+                }
+
+                if ( match && (this.messageCallbacks[callbackTopic] != null) ) {
+                    this.messageCallbacks[callbackTopic](topic, payload);
+                }
             }
         });
     }
