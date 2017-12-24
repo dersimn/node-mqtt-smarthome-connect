@@ -9,7 +9,7 @@ class MqttSmarthome extends EventEmitter {
         this.mqttUrl = mqttUrl || 'mqtt://localhost';
         this.clientId = (options.name || 'mqttsmarthome') + Math.random().toString(16).substr(2, 8);
 
-        if (options.logger == null) {
+        if (options.logger === null) {
             this.log = require('yalm');
             this.log.setLevel('silent');
         } else {
@@ -53,7 +53,7 @@ class MqttSmarthome extends EventEmitter {
                 try {
                     payload = JSON.parse(payload);
                 } catch (err) {
-                    log.error(err.toString());
+                    this.log.error(err.toString());
                 }
             } else if (payload === 'false') {
                 payload = false;
@@ -84,7 +84,7 @@ class MqttSmarthome extends EventEmitter {
                     }
                 }
 
-                if (match && (this.messageCallbacks[callbackTopic] != null)) {
+                if (match && (this.messageCallbacks[callbackTopic] !== null)) {
                     this.messageCallbacks[callbackTopic](topic, payload);
                 }
             }
