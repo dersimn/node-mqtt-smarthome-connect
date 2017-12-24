@@ -94,8 +94,6 @@ class MqttSmarthome extends EventEmitter {
     subscribe(topic, callback = null) {
         this.mqtt.subscribe(topic);
         this.messageCallbacks[topic] = callback; 
-
-        //TODO: check if we need to resubscribe after reconnect
     }
 
     publish(basetopic, data, level = 0) {
