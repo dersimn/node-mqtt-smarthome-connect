@@ -44,7 +44,7 @@ class MqttSmarthome extends EventEmitter {
             this.log.info('mqtt reconnect');
         });
 
-        this.mqtt.on('message', (topic, payload) => {
+        this.mqtt.on('message', (topic, payload, packet) => {
             payload = payload.toString();
             this.log.debug('mqtt <', topic, payload);
 
@@ -63,7 +63,7 @@ class MqttSmarthome extends EventEmitter {
                 payload = parseFloat(payload);
             }
 
-            this.emit('message', topic, payload);
+            this.emit('message', topic, payload, packet);
             const topicParts = topic.split('/');
             for (const callbackTopic in this.messageCallbacks) {
                 const callbackTopicParts = callbackTopic.split('/');
