@@ -9,7 +9,7 @@ class MqttSmarthome extends EventEmitter {
         this.mqttUrl = mqttUrl || 'mqtt://localhost';
         this.clientId = (options.name || 'mqttsmarthome') + Math.random().toString(16).substr(2, 8);
 
-        if (options.logger === null) {
+        if (options.logger == null) { // eslint-disable-line no-eq-null
             this.log = require('yalm');
             this.log.setLevel('silent');
         } else {
