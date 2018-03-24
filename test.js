@@ -1,7 +1,7 @@
 const MqttSmarthome = require("./index.js");
 const log = require("yalm");
 log.setLevel("debug");
-const mqsh = new MqttSmarthome("mqtt://10.1.1.50", {logger: log});
+const mqsh = new MqttSmarthome("mqtt://127.0.0.1", {logger: log});
 
 mqsh.on("message", (topic, payload) => {
 	log.debug("event message", topic, payload);
