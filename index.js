@@ -65,7 +65,7 @@ class MqttSmarthome extends EventEmitter {
 
             this.emit('message', topic, payload, packet);
             const topicParts = topic.split('/');
-            for (const callbackTopic in this.messageCallbacks) {
+            Object.keys(this.messageCallbacks).forEach(callbackTopic => {
                 const callbackTopicParts = callbackTopic.split('/');
 
                 let match = true;
@@ -87,7 +87,7 @@ class MqttSmarthome extends EventEmitter {
                 if (match && (this.messageCallbacks[callbackTopic] !== null)) {
                     this.messageCallbacks[callbackTopic](topic, payload);
                 }
-            }
+            });
         });
     }
 
