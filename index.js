@@ -3,7 +3,15 @@ const Mqtt = require('mqtt');
 const mqttWildcard = require('mqtt-wildcard');
 const shortid = require('shortid');
 
+/**
+ * @class MqttSmarthome
+ */
 class MqttSmarthome extends EventEmitter {
+    /**
+     *
+     * @param mqttUrl
+     * @param options
+     */
     constructor(mqttUrl, options = {}) {
         super();
         this.messageCallbacks = {};
