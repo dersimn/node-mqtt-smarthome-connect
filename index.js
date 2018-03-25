@@ -82,11 +82,12 @@ class MqttSmarthome extends EventEmitter {
     }
 
     /**
+     *
      * @param {string} topic
      * @param {function} callback
      * @returns {idSubscription} id
      */
-    subscribe(topic, callback) {
+    subscribe(topic, callback = null) {
         const id = shortid.generate();
         this.callbackIds[id] = topic;
         if (!this.messageCallbacks[topic]) {
@@ -95,6 +96,21 @@ class MqttSmarthome extends EventEmitter {
         this.messageCallbacks[topic][id] = callback;
         this.mqtt.subscribe(topic);
         return id;
+    }
+
+    /**
+     *
+     * @param {idSubscription} id
+     * @returns {boolean} last - true if it was the last subscription on that topic
+     */
+    unsubscribe(id) {
+        const topic = this.callbackIds[id];
+        delete this.messageCallbacks[topic][id];
+        if (Object.keys(this.messageCallbacks[topic]).length === 0) {
+            this.mqtt.unsubscribe(topic);
+            return true;
+        }
+        return false;
     }
 
     publish(basetopic, data, level = 0) {
