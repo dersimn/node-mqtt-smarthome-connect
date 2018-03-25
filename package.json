@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "mqtt": "^2.14.0",
+    "mqtt-wildcard": "^3.0.9",
     "yalm": "^4.1.0"
   },
   "devDependencies": {
