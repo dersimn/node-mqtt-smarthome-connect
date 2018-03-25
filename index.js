@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 const Mqtt = require('mqtt');
+const mqttWildcard = require('mqtt-wildcard');
 
 class MqttSmarthome extends EventEmitter {
     constructor(mqttUrl, options = {}) {
@@ -64,27 +65,8 @@ class MqttSmarthome extends EventEmitter {
             }
 
             this.emit('message', topic, payload, packet);
-            const topicParts = topic.split('/');
             Object.keys(this.messageCallbacks).forEach(callbackTopic => {
-                const callbackTopicParts = callbackTopic.split('/');
-
-                let match = true;
-                for (let i = 0; i < callbackTopicParts.length; i++) {
-                    if (callbackTopicParts[i] == '+') {
-                        continue;
-                    }
-                    if (callbackTopicParts[i] == '#') {
-                        break;
-                    }
-
-                    if (callbackTopicParts[i] == topicParts[i]) {
-                        match &= true;
-                    } else {
-                        match &= false;
-                    }
-                }
-
-                if (match && (this.messageCallbacks[callbackTopic] !== null)) {
+                if (mqttWildcard(topic, callbackTopic) && (typeof this.messageCallbacks[callbackTopic] === 'function')) {
                     this.messageCallbacks[callbackTopic](topic, payload);
                 }
             });
