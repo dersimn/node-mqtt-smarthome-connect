@@ -1,11 +1,13 @@
 const EventEmitter = require('events');
 const Mqtt = require('mqtt');
 const mqttWildcard = require('mqtt-wildcard');
+const shortid = require('shortid');
 
 class MqttSmarthome extends EventEmitter {
     constructor(mqttUrl, options = {}) {
         super();
         this.messageCallbacks = {};
+        this.callbackIds = {};
 
         this.mqttUrl = mqttUrl || 'mqtt://localhost';
         this.clientId = (options.name || 'mqttsmarthome') + Math.random().toString(16).substr(2, 8);
@@ -65,17 +67,34 @@ class MqttSmarthome extends EventEmitter {
             }
 
             this.emit('message', topic, payload, packet);
+
             Object.keys(this.messageCallbacks).forEach(callbackTopic => {
-                if (mqttWildcard(topic, callbackTopic) && (typeof this.messageCallbacks[callbackTopic] === 'function')) {
-                    this.messageCallbacks[callbackTopic](topic, payload, packet);
+                if (mqttWildcard(topic, callbackTopic) && this.messageCallbacks[callbackTopic]) {
+                    Object.keys(this.messageCallbacks[callbackTopic]).forEach(id => {
+                        if (typeof this.messageCallbacks[callbackTopic][id] === 'function') {
+                            this.messageCallbacks[callbackTopic][id](topic, payload, packet);
+                        }
+                    });
                 }
             });
+
         });
     }
 
-    subscribe(topic, callback = null) {
+    /**
+     * @param {string} topic
+     * @param {function} callback
+     * @returns {idSubscription} id
+     */
+    subscribe(topic, callback) {
+        const id = shortid.generate();
+        this.callbackIds[id] = topic;
+        if (!this.messageCallbacks[topic]) {
+           this.messageCallbacks[topic] = {};
+        }
+        this.messageCallbacks[topic][id] = callback;
         this.mqtt.subscribe(topic);
-        this.messageCallbacks[topic] = callback;
+        return id;
     }
 
     publish(basetopic, data, level = 0) {
