@@ -67,7 +67,7 @@ class MqttSmarthome extends EventEmitter {
             this.emit('message', topic, payload, packet);
             Object.keys(this.messageCallbacks).forEach(callbackTopic => {
                 if (mqttWildcard(topic, callbackTopic) && (typeof this.messageCallbacks[callbackTopic] === 'function')) {
-                    this.messageCallbacks[callbackTopic](topic, payload);
+                    this.messageCallbacks[callbackTopic](topic, payload, packet);
                 }
             });
         });
