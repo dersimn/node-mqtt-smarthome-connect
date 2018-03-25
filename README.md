@@ -19,41 +19,90 @@
 
 ## MqttSmarthome
 **Kind**: global class  
+**See**: https://github.com/mqttjs/MQTT.js#client for all available options  
 
 * [MqttSmarthome](#MqttSmarthome)
-    * [new MqttSmarthome(mqttUrl, options)](#new_MqttSmarthome_new)
-    * [.subscribe(topic, callback)](#MqttSmarthome+subscribe) ⇒ <code>idSubscription</code>
-    * [.unsubscribe(id)](#MqttSmarthome+unsubscribe) ⇒ <code>boolean</code>
+    * [new MqttSmarthome([mqttUrl], [options])](#new_MqttSmarthome_new)
+    * [.connect()](#MqttSmarthome+connect)
+    * [.end([force], [callback])](#MqttSmarthome+end)
+    * [.subscribe(topic, [callback])](#MqttSmarthome+subscribe) ⇒ <code>idSubscription</code>
+    * [.unsubscribe(id)](#MqttSmarthome+unsubscribe) ⇒ <code>number</code>
+    * [.publish(topic, payload, [options], [callback])](#MqttSmarthome+publish)
+    * [.publishMulti(basetopic, data, [options])](#MqttSmarthome+publishMulti)
 
 <a name="new_MqttSmarthome_new"></a>
 
-### new MqttSmarthome(mqttUrl, options)
+### new MqttSmarthome([mqttUrl], [options])
 
-| Param |
-| --- |
-| mqttUrl | 
-| options | 
+| Param | Type | Default |
+| --- | --- | --- |
+| [mqttUrl] | <code>string</code> | <code>&quot;mqtt://localhost&quot;</code> | 
+| [options] | <code>object</code> |  | 
+| [options.logger] | <code>object</code> |  | 
+| [options.clientId] | <code>string</code> | <code>&quot;mqttsmarthome-&lt;random&gt;&quot;</code> | 
+
+<a name="MqttSmarthome+connect"></a>
+
+### mqttSmarthome.connect()
+**Kind**: instance method of [<code>MqttSmarthome</code>](#MqttSmarthome)  
+<a name="MqttSmarthome+end"></a>
+
+### mqttSmarthome.end([force], [callback])
+**Kind**: instance method of [<code>MqttSmarthome</code>](#MqttSmarthome)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [force] | <code>boolean</code> | <code>false</code> | passing it to true will close the client right away, without waiting for the in-flight messages to be acked. |
+| [callback] | <code>function</code> |  | will be called when the client is closed. |
 
 <a name="MqttSmarthome+subscribe"></a>
 
-### mqttSmarthome.subscribe(topic, callback) ⇒ <code>idSubscription</code>
+### mqttSmarthome.subscribe(topic, [callback]) ⇒ <code>idSubscription</code>
 **Kind**: instance method of [<code>MqttSmarthome</code>](#MqttSmarthome)  
 **Returns**: <code>idSubscription</code> - id  
 
 | Param | Type | Default |
 | --- | --- | --- |
 | topic | <code>string</code> |  | 
-| callback | <code>function</code> | <code></code> | 
+| [callback] | <code>function</code> | <code></code> | 
 
 <a name="MqttSmarthome+unsubscribe"></a>
 
-### mqttSmarthome.unsubscribe(id) ⇒ <code>boolean</code>
+### mqttSmarthome.unsubscribe(id) ⇒ <code>number</code>
 **Kind**: instance method of [<code>MqttSmarthome</code>](#MqttSmarthome)  
-**Returns**: <code>boolean</code> - last - true if it was the last subscription on that topic  
+**Returns**: <code>number</code> - remaining number of subscription on that topic  
 
 | Param | Type |
 | --- | --- |
 | id | <code>idSubscription</code> | 
+
+<a name="MqttSmarthome+publish"></a>
+
+### mqttSmarthome.publish(topic, payload, [options], [callback])
+**Kind**: instance method of [<code>MqttSmarthome</code>](#MqttSmarthome)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| topic | <code>string</code> |  |  |
+| payload | <code>\*</code> |  |  |
+| [options] | <code>object</code> |  |  |
+| [options.qos] | <code>number</code> | <code>0</code> | QoS level |
+| [options.retain] | <code>boolean</code> | <code>false</code> | Retain Flag |
+| [options.dup] | <code>boolean</code> | <code>false</code> | Mark as duplicate flag |
+| [callback] | <code>function</code> |  | Fired when the QoS handling completes, or at the next tick if QoS 0. An error occurs if client is disconnecting. |
+
+<a name="MqttSmarthome+publishMulti"></a>
+
+### mqttSmarthome.publishMulti(basetopic, data, [options])
+Publish multiple methods at once.
+
+**Kind**: instance method of [<code>MqttSmarthome</code>](#MqttSmarthome)  
+
+| Param | Type |
+| --- | --- |
+| basetopic | <code>string</code> | 
+| data | <code>object</code> | 
+| [options] | <code>object</code> | 
 
 
 ## License
