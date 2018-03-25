@@ -108,9 +108,10 @@ class MqttSmarthome extends EventEmitter {
         delete this.messageCallbacks[topic][id];
         if (Object.keys(this.messageCallbacks[topic]).length === 0) {
             this.mqtt.unsubscribe(topic);
-            return true;
+            delete this.messageCallbacks[topic];
+            return 0;
         }
-        return false;
+        return Object.keys(this.messageCallbacks[topic]).length;
     }
 
     publish(basetopic, data, level = 0) {

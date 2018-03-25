@@ -62,3 +62,12 @@ mqsh.publish("test/set/3", "foo");
 mqsh.publish("test/status/3", "foo");
 mqsh.publish("test/set/3/sub", "foo");
 mqsh.publish("test/set/3/sub/sub", "foo");
+
+
+var id1 = mqsh.subscribe("test/set/4");
+var id2 = mqsh.subscribe("test/set/4");
+log.debug(mqsh.messageCallbacks);
+log.debug(mqsh.unsubscribe(id2));
+log.debug(mqsh.messageCallbacks);
+log.debug(mqsh.unsubscribe(id1));
+log.debug(mqsh.messageCallbacks);
