@@ -14,7 +14,7 @@ const MqttSmarthome = require(path.join(__dirname, '..', 'index.js'));
 let mqsh;
 
 function debug() {
-    //console.log.apply(this, arguments);
+    // console.log.apply(this, arguments);
 }
 
 function start() {
@@ -79,8 +79,7 @@ function publishTestSuccessful(testTopic, testPayloadPub, testPayloadSub) {
 let subCount = 0;
 function subscribeTestSuccessfulCallback(testTopicPub, testTopicSub, testPayloadPub, testPayloadSub) {
     let subId;
-    it('receive ' + JSON.stringify(testPayloadSub) + ' on ' + testTopicPub, function (done) {
-        this.timeout(4000);
+    it('subscribe ' + JSON.stringify(testTopicSub) + ' and receive ' + JSON.stringify(testPayloadSub) + ' on ' + JSON.stringify(testTopicPub), function (done) {
         subCount += 1;
         debug('mqsh sub callback', testTopicSub);
         subId = mqsh.subscribe(testTopicSub, (topic, val, packet) => {
@@ -89,6 +88,8 @@ function subscribeTestSuccessfulCallback(testTopicPub, testTopicSub, testPayload
             val.should.equal(testPayloadSub);
             done();
         });
+        this.timeout(4000);
+
         setTimeout(() => {
             mqtt.publish(testTopicPub, testPayloadPub);
         }, 100);
@@ -103,6 +104,10 @@ function subscribeTestSuccessfulCallback(testTopicPub, testTopicSub, testPayload
 
 function subscribeTestSuccessfulEvent(testTopicPub, testTopicSub, testPayloadPub, testPayloadSub) {
     let subId;
+    it('subscribe ' + testTopicSub, function () {
+        debug('mqsh sub', testTopicSub);
+        subId = mqsh.subscribe(testTopicSub);
+    });
     it('receive ' + JSON.stringify(testPayloadSub) + ' on ' + testTopicPub, function (done) {
         this.timeout(4000);
         subCount += 1;
@@ -113,8 +118,6 @@ function subscribeTestSuccessfulEvent(testTopicPub, testTopicSub, testPayloadPub
             mqsh.removeAllListeners();
             done();
         });
-        debug('mqsh sub', testTopicSub);
-        subId = mqsh.subscribe(testTopicSub);
         debug('mqtt >', testTopicPub, testPayloadPub);
         setTimeout(() => {
             mqtt.publish(testTopicPub, testPayloadPub);
