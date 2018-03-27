@@ -6,7 +6,7 @@
   "scripts": {
     "test": "camo-purge; xo",
     "lintfix": "xo --fix",
-    "docs": "cat docs/README.header.md > README.md ; jsdoc2md -f index.js >> README.md ; cat docs/README.footer.md >> README.md"
+    "docs": "cat docs/README.header.md > README.md ; jsdoc2md --param-list-format list -f index.js >> README.md ; cat docs/README.footer.md >> README.md"
   },
   "repository": {
     "type": "git",

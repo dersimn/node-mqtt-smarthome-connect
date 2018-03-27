@@ -7,8 +7,7 @@ class MqttSmarthome extends EventEmitter {
     /**
      *
      * @param {string} [mqttUrl=mqtt://localhost]
-     * @param {object} [options]
-     * @see https://github.com/mqttjs/MQTT.js#client for all available options
+     * @param {object} [options] see all available options in the [MQTT.js docs](https://github.com/mqttjs/MQTT.js#client)
      * @param {object} [options.logger]
      * @param {string} [options.clientId=mqttsmarthome-<random>]
      */
@@ -17,6 +16,7 @@ class MqttSmarthome extends EventEmitter {
         this.messageCallbacks = {};
         this.callbackIds = {};
 
+        // Todo document which properties logger has to supply
         this.log = options.logger || {
             debug: () => {},
             info: () => {},
@@ -24,6 +24,7 @@ class MqttSmarthome extends EventEmitter {
             error: () => {}
         };
 
+        // Delete non-MQTT.js options (Todo clarify necessary?)
         delete options.logger;
 
         this.mqttUrl = mqttUrl;
@@ -31,7 +32,9 @@ class MqttSmarthome extends EventEmitter {
             clientId: 'mqttsmarthome-' + shortid.generate()
         }, options);
 
-        console.log(this.mqttOptions);
+        /* Todo clarify if we should call connect on instanciatig. I think this would be a convenient behavior. Maybe
+            configurable through a default true autoConnect option.
+         */
     }
 
     /**
@@ -71,6 +74,8 @@ class MqttSmarthome extends EventEmitter {
                 if (mqttWildcard(topic, callbackTopic) && this.messageCallbacks[callbackTopic]) {
                     Object.keys(this.messageCallbacks[callbackTopic]).forEach(id => {
                         if (typeof this.messageCallbacks[callbackTopic][id] === 'function') {
+                            // Todo clarify (optional) topic shortening (replace +/status/# with +//#)
+                            // @simon let us chat or phone, then i can explain the thought behind that
                             this.messageCallbacks[callbackTopic][id](topic, payload, packet);
                         }
                     });
@@ -80,7 +85,7 @@ class MqttSmarthome extends EventEmitter {
     }
 
     /**
-     *
+     * Disconnect from the MQTT broker.
      * @param {boolean} [force=false] passing it to true will close the client right away, without waiting for the in-flight messages to be acked.
      * @param {function} [callback] will be called when the client is closed.
      */
@@ -89,8 +94,10 @@ class MqttSmarthome extends EventEmitter {
     }
 
     _parsePayload(payload) {
+        /* Todo clarify what to do with Buffer (binary) payloads? Do we want to support them? I think we should. */
         payload = payload.toString();
 
+        /* Todo clarify extract this type-guessing stuff into an own function or even module or is this exaggerated? */
         if (payload.indexOf('{') !== -1) {
             try {
                 payload = JSON.parse(payload);
@@ -107,6 +114,9 @@ class MqttSmarthome extends EventEmitter {
         return payload;
     }
 
+    // Todo clarify: should we rename subscribe to "sub" and publish to "pub"? Just for convenience. I think it's
+    // clearly enough and less to type ;)
+
     /**
      *
      * @param {string} topic
@@ -114,6 +124,15 @@ class MqttSmarthome extends EventEmitter {
      * @returns {idSubscription} id
      */
     subscribe(topic, callback = null) {
+        /* Todo clarify if we should have the possiblity to set the QoS level. Will become difficult as there could be
+            more than 1 subscriptions on the same topic with different callbacks. Solution could be to always subscribe
+            with the highest callback. This would imply that we need to keep track of the current subscriptions QoS
+            level, could be done in the callbackIds object, instead of saving the string topic we could save am object
+            like {topic: 'the/topic/', qos: 2} and introduce a new cache that holds all IDs belonging to a specific
+            topic.
+             @Simon - what do you think? I only use level 0 as of today, but I think having the possibility to use
+             higher levels would be good. */
+
         const id = shortid.generate();
         this.callbackIds[id] = topic;
         if (!this.messageCallbacks[topic]) {
@@ -125,8 +144,10 @@ class MqttSmarthome extends EventEmitter {
     }
 
     /**
+     * Unregister a callback. If no registered callback on the corresponding topic is left a MQTT unsubscribe will be
+     * done.
      *
-     * @param {idSubscription} id
+     * @param {idSubscription} id an id that was returned by the [subscribe()](#MqttSmarthome+subscribe) method.
      * @returns {number} remaining number of subscription on that topic
      */
     unsubscribe(id) {
@@ -144,6 +165,8 @@ class MqttSmarthome extends EventEmitter {
     }
 
     /**
+     * Publish a MQTT message. Payloads that are neither of type `string` nor an instance of `Buffer` will be JSON
+     * stringified.
      *
      * @param {string} topic
      * @param {*} payload
@@ -169,10 +192,12 @@ class MqttSmarthome extends EventEmitter {
     }
 
     /**
-     * Publish multiple methods at once.
+     * Publish multiple messages at once. Every property value of the object data is published as a distinct message.
+     * The basetopic is appended by the properties name.
      * @param {string} basetopic
      * @param {object} data
-     * @param {object} [options]
+     * @param {object} [options] see [publish](#MqttSmarthome+publish)
+     * @example publishMulti('sun', {azimuth: 5, altitude: 0} // will publish 5 on the topic sun/azimuth and 0 on the topic sun/altitude.
      */
     publishMulti(basetopic, data, options) {
         if (typeof data !== 'object') {
@@ -181,6 +206,40 @@ class MqttSmarthome extends EventEmitter {
         Object.keys(data).forEach(topic => {
             this.publish(basetopic + '/' + topic, data[topic], options);
         });
+    }
+
+    /**
+     * Publish a value on a MQTT-Smarthome +/set/# topi.
+     * @param topic
+     * @param val
+     * @param options
+     * @param callback
+     */
+    publishSet(topic, val, options, callback) {
+        // Todo insert "set" as second topic level if undefined. E.g. "hm//Licht/STATE" becomes "hm/set/Licht/STATE"
+        // Todo replace "$" by "var/set/". E.g. "$Automatik/Licht" becomes "var/set/Automatik/Licht"
+        this.publish(topic, val, options, callback);
+    }
+
+    /**
+     * Publish a value on a MQTT-SMart +/status/# topic
+     * @param topic
+     * @param val
+     * @param options
+     * @param callback
+     */
+    publishStatus(topic, val, options, callback) {
+        /* Todo clarify if we also add the lc attribute here. Would mean we have to keep track of all published values.
+        @Simon this would be a good place to provide a time-to-live option and set the unpublish-timeout. what do you
+        think? */
+        // Todo insert "status" as second topic level if undefined. E.g. "hm//Licht/STATE" becomes "hm/status/Licht/STATE"
+        // Todo replace "$" by "var/status/". E.g. "$Automatik/Licht" becomes "var/status/Automatik/Licht"
+        const payload = {val, ts: (new Date().getTime())};
+        if (typeof options.retain === 'undefined') {
+            // Retain default true
+            options.retain = true;
+        }
+        this.publish(topic, payload, options, callback);
     }
 }
 
