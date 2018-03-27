@@ -14,7 +14,7 @@ const MqttSmarthome = require(path.join(__dirname, '..', 'index.js'));
 let mqsh;
 
 function debug() {
-    console.log.apply(this, arguments);
+    //console.log.apply(this, arguments);
 }
 
 function start() {
@@ -27,7 +27,6 @@ function start() {
         mqtt.on('connect', function () {
             mqtt.removeAllListeners();
             done();
-
         });
     });
     it('mqsh connect to mqtt', function (done) {
@@ -164,7 +163,7 @@ describe('subscribe', function () {
     subscribeTestSuccessfulEvent('test/false', JSON.stringify(payload), payload);
 
     /*
-    payload = [3, 4, false, 'string', {bla: 'foo'}];
+    Payload = [3, 4, false, 'string', {bla: 'foo'}];
     subscribeTestSuccessfulEvent('test/1', JSON.stringify(payload), payload);
     payload = {bla: 'foo', arr: [1, 2, false]};
     subscribeTestSuccessfulEvent('test/1', JSON.stringify(payload), payload);
@@ -181,7 +180,7 @@ describe('subscribe', function () {
     subscribeTestSuccessfulCallback('test/false', JSON.stringify(payload), payload);
 
     /*
-    payload = [3, 4, false, 'string', {bla: 'foo'}];
+    Payload = [3, 4, false, 'string', {bla: 'foo'}];
     subscribeTestSuccessfulCallback('test/1', JSON.stringify(payload), payload);
     payload = {bla: 'foo', arr: [1, 2, false]};
     subscribeTestSuccessfulCallback('test/1', JSON.stringify(payload), payload);
