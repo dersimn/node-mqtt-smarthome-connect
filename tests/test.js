@@ -149,7 +149,7 @@ describe('publish', function () {
     publishTestSuccessful('test/obj', payload, JSON.stringify(payload));
 });
 
-describe('subscribe', function () {
+describe('receive messages via event', function () {
     let payload;
 
     subscribeTestSuccessfulEvent('test/1', '1', 1);
@@ -167,7 +167,12 @@ describe('subscribe', function () {
     subscribeTestSuccessfulEvent('test/1', JSON.stringify(payload), payload);
     payload = {bla: 'foo', arr: [1, 2, false]};
     subscribeTestSuccessfulEvent('test/1', JSON.stringify(payload), payload);
+
 */
+});
+
+describe('receive messages via callback', function () {
+    let payload;
 
     subscribeTestSuccessfulCallback('test/1', '1', 1);
     subscribeTestSuccessfulCallback('test/2', '2', 2);
