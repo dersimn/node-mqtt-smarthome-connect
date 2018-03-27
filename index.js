@@ -55,30 +55,47 @@ class MqttSmarthome extends EventEmitter {
         this.mqtt.on('connect', () => {
             // Todo clarify: I'd like to stick to the event names of MQTT.js. Makes porting to mqtt-smarthome easier and
             // is just better ;) Ok for you @Simon?
+
+            /**
+             * @event connected
+             */
             this.emit('connected');
             this.log.debug('mqtt conencted', this.mqttUrl, this.clientId);
         });
 
         this.mqtt.on('close', () => {
+            /**
+             * @event disconnected
+             */
             this.emit('disconnected');
             this.log.debug('mqtt disconnected');
         });
 
         this.mqtt.on('error', err => {
+            // Todo: clarify if we should emit this event - i think we should
             this.log.error('mqtt', err.toString());
         });
 
         this.mqtt.on('offline', () => {
+            // Todo: clarify if we should emit this event - i think we should
             this.log.error('mqtt offline');
         });
 
         this.mqtt.on('reconnect', () => {
+            // Todo: clarify if we should emit this event - i think we should
             this.log.info('mqtt reconnect');
         });
 
         this.mqtt.on('message', (topic, payload, packet) => {
             payload = this._parsePayload(payload);
             this.log.debug('mqtt <', topic, payload);
+
+            /**
+             * @event message
+             * @param {string} topic
+             * @param {string} payload
+             * @param {Mqtt.packet} packet Todo add link to MQTT.js docs
+             */
             this.emit('message', topic, payload, packet);
 
             Object.keys(this.messageCallbacks).forEach(callbackTopic => {
@@ -105,7 +122,9 @@ class MqttSmarthome extends EventEmitter {
     }
 
     _parsePayload(payload) {
-        /* Todo clarify what to do with Buffer (binary) payloads? Do we want to support them? I think we should. */
+        /* Todo clarify what to do with Buffer (binary) payloads? Do we want to support them? I think we should.
+            Solution: don't bother. The raw payload is available in packet.payload.
+          */
         payload = payload.toString();
 
         /* Todo clarify extract this type-guessing stuff into an own function or even module or is this exaggerated? */
@@ -136,12 +155,14 @@ class MqttSmarthome extends EventEmitter {
      * @returns {idSubscription} id
      */
     subscribe(topic, callback = null) {
+        // Todo clarify if we need callback default null. Wouldn't undefined be ok?
         /* Todo clarify if we should have the possiblity to set the QoS level. Will become difficult as there could be
             more than 1 subscriptions on the same topic with different callbacks. Solution could be to always subscribe
             with the highest callback. This would imply that we need to keep track of the current subscriptions QoS
             level, could be done in the callbackIds object, instead of saving the string topic we could save am object
             like {topic: 'the/topic/', qos: 2} and introduce a new cache that holds all IDs belonging to a specific
-            topic.
+            topic. Subscribe would then have to check if the QoS Level needs to raised, unsubscribe would have to check
+            if the QoS level needs to be lowered.
              @dersimn - what do you think? I only use level 0 as of today, but I think having the possibility to use
              higher levels would be good. */
 
