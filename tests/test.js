@@ -9,7 +9,7 @@ const MqttSmarthome = require(path.join(__dirname, '..', 'index.js'));
 
 describe('mqtt connection', function () {
     let mqsh;
-    it('should instantiate without throwing an error', function () {
+    it('should create an instance without throwing an error', function () {
         mqsh = new MqttSmarthome();
     });
     it('should connect to mqtt', function (done) {
