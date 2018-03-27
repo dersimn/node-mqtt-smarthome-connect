@@ -104,6 +104,13 @@ class MqttSmarthome extends EventEmitter {
                         if (typeof this.messageCallbacks[callbackTopic][id] === 'function') {
                             // Todo clarify (optional) topic shortening (replace +/status/# with +//#)
                             // @simon let us chat or phone, then i can explain the thought behind that
+
+                            /**
+                             * @typedef {function} messageCallback
+                             * @param {string} topic
+                             * @param {string|number|boolean|object} payload
+                             * @param {Mqtt.packet} packet
+                             */
                             this.messageCallbacks[callbackTopic][id](topic, payload, packet);
                         }
                     });

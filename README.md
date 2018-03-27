@@ -16,6 +16,22 @@
 
 ## API
 
+## Classes
+
+<dl>
+<dt><a href="#MqttSmarthome">MqttSmarthome</a></dt>
+<dd><p>Todo: clarify: rename the lib. Could we call this Module &quot;mqtt-smarthome-connection&quot; on npm and keept the npm name
+&quot;mqtt-smarthome&quot; reserved for a possible future meta-package?</p>
+</dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#messageCallback">messageCallback</a> : <code>function</code></dt>
+<dd></dd>
+</dl>
+
 <a name="MqttSmarthome"></a>
 
 ## MqttSmarthome
@@ -71,7 +87,7 @@ Disconnect from the MQTT broker.
 **Params**
 
 - topic <code>string</code>
-- [callback] <code>messageCallback</code> <code> = </code>
+- [callback] [<code>messageCallback</code>](#messageCallback) <code> = </code>
 
 <a name="MqttSmarthome+unsubscribe"></a>
 
@@ -162,6 +178,16 @@ Publish a value on a MQTT-SMart +/status/# topic
 - topic <code>string</code>
 - payload <code>string</code>
 - packet <code>Mqtt.packet</code> - Todo add link to MQTT.js docs
+
+<a name="messageCallback"></a>
+
+## messageCallback : <code>function</code>
+**Kind**: global typedef  
+**Params**
+
+- topic <code>string</code>
+- payload <code>string</code> | <code>number</code> | <code>boolean</code> | <code>object</code>
+- packet <code>Mqtt.packet</code>
 
 
 ## License
