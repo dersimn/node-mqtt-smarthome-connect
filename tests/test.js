@@ -14,7 +14,7 @@ const MqttSmarthome = require(path.join(__dirname, '..', 'index.js'));
 let mqsh;
 
 function debug() {
-    // console.log.apply(this, arguments);
+    //console.log.apply(this, arguments);
 }
 
 function start() {
@@ -77,51 +77,53 @@ function publishTestSuccessful(testTopic, testPayloadPub, testPayloadSub) {
 }
 
 let subCount = 0;
-function subscribeTestSuccessfulCallback(testTopic, testPayloadPub, testPayloadSub) {
+function subscribeTestSuccessfulCallback(testTopicPub, testTopicSub, testPayloadPub, testPayloadSub) {
     let subId;
-    it('receive ' + JSON.stringify(testPayloadSub) + ' on ' + testTopic, function (done) {
+    it('receive ' + JSON.stringify(testPayloadSub) + ' on ' + testTopicPub, function (done) {
         this.timeout(4000);
         subCount += 1;
-        debug('mqsh sub callback', testTopic);
-        subId = mqsh.subscribe(testTopic, (topic, val, packet) => {
+        debug('mqsh sub callback', testTopicSub);
+        subId = mqsh.subscribe(testTopicSub, (topic, val, packet) => {
             debug('<', topic, val);
-            topic.should.equal(testTopic);
+            topic.should.equal(testTopicPub);
             val.should.equal(testPayloadSub);
             done();
         });
         setTimeout(() => {
-            mqtt.publish(testTopic, testPayloadPub);
-        }, 0);
+            mqtt.publish(testTopicPub, testPayloadPub);
+        }, 100);
     });
-    it('unsubscribe ' + testTopic, function (done) {
-        debug('mqsh unsub', testTopic, subId, 'count before decrement:' + subCount);
+    it('unsubscribe ' + testTopicSub, function (done) {
+        debug('mqsh unsub', testTopicSub, subId, 'count before decrement:' + subCount);
         subCount -= 1;
-        // Todo: this fails. why? mqsh.unsubscribe(subId).should.equal(subCount);
+        mqsh.unsubscribe(subId).should.equal(subCount);
         done();
     });
 }
 
-function subscribeTestSuccessfulEvent(testTopic, testPayloadPub, testPayloadSub) {
+function subscribeTestSuccessfulEvent(testTopicPub, testTopicSub, testPayloadPub, testPayloadSub) {
     let subId;
-    it('receive ' + JSON.stringify(testPayloadSub) + ' on ' + testTopic, function (done) {
+    it('receive ' + JSON.stringify(testPayloadSub) + ' on ' + testTopicPub, function (done) {
         this.timeout(4000);
         subCount += 1;
         mqsh.on('message', (topic, val, packet) => {
             debug('mqsh <', topic, val);
-            topic.should.equal(testTopic);
+            topic.should.equal(testTopicPub);
             val.should.equal(testPayloadSub);
             mqsh.removeAllListeners();
             done();
         });
-        debug('mqsh sub event', testTopic);
-        subId = mqsh.subscribe(testTopic);
-        debug('mqtt >', testTopic, testPayloadPub);
-        mqtt.publish(testTopic, testPayloadPub);
+        debug('mqsh sub', testTopicSub);
+        subId = mqsh.subscribe(testTopicSub);
+        debug('mqtt >', testTopicPub, testPayloadPub);
+        setTimeout(() => {
+            mqtt.publish(testTopicPub, testPayloadPub);
+        }, 100);
     });
-    it('unsubscribe ' + testTopic, function (done) {
-        debug('mqsh unsub', testTopic, subId, 'count before decrement:' + subCount);
+    it('unsubscribe ' + testTopicSub, function (done) {
+        debug('mqsh unsub', testTopicSub, subId, 'count before decrement:' + subCount);
         subCount -= 1;
-        // Todo: this fails. why? mqsh.unsubscribe(subId).should.equal(subCount);
+        mqsh.unsubscribe(subId).should.equal(subCount);
         done();
     });
 }
@@ -149,18 +151,18 @@ describe('publish', function () {
     publishTestSuccessful('test/obj', payload, JSON.stringify(payload));
 });
 
-describe('receive messages via event', function () {
+describe('subscribe and receive messages via event', function () {
     let payload;
 
-    subscribeTestSuccessfulEvent('test/1', '1', 1);
-    subscribeTestSuccessfulEvent('test/2', '2', 2);
+    subscribeTestSuccessfulEvent('test/1', 'test/1', '1', 1);
+    subscribeTestSuccessfulEvent('test/2', 'test/2', '2', 2);
     payload = 3.14159;
-    subscribeTestSuccessfulEvent('test/pi', JSON.stringify(payload), payload);
+    subscribeTestSuccessfulEvent('test/pi', 'test/pi', JSON.stringify(payload), payload);
 
     payload = true;
-    subscribeTestSuccessfulEvent('test/true', JSON.stringify(payload), payload);
+    subscribeTestSuccessfulEvent('test/true', 'test/true', JSON.stringify(payload), payload);
     payload = false;
-    subscribeTestSuccessfulEvent('test/false', JSON.stringify(payload), payload);
+    subscribeTestSuccessfulEvent('test/false', 'test/false', JSON.stringify(payload), payload);
 
     /*
     payload = [3, 4, false, 'string', {bla: 'foo'}];
@@ -171,18 +173,18 @@ describe('receive messages via event', function () {
 */
 });
 
-describe('receive messages via callback', function () {
+describe('subscribe and receive messages via callback', function () {
     let payload;
 
-    subscribeTestSuccessfulCallback('test/1', '1', 1);
-    subscribeTestSuccessfulCallback('test/2', '2', 2);
+    subscribeTestSuccessfulCallback('test/1', 'test/1', '1', 1);
+    subscribeTestSuccessfulCallback('test/2', 'test/2', '2', 2);
     payload = 3.14159;
-    subscribeTestSuccessfulCallback('test/pi', JSON.stringify(payload), payload);
+    subscribeTestSuccessfulCallback('test/pi', 'test/pi', JSON.stringify(payload), payload);
 
     payload = true;
-    subscribeTestSuccessfulCallback('test/true', JSON.stringify(payload), payload);
+    subscribeTestSuccessfulCallback('test/true', 'test/true', JSON.stringify(payload), payload);
     payload = false;
-    subscribeTestSuccessfulCallback('test/false', JSON.stringify(payload), payload);
+    subscribeTestSuccessfulCallback('test/false', 'test/false', JSON.stringify(payload), payload);
 
     /*
     payload = [3, 4, false, 'string', {bla: 'foo'}];
@@ -190,6 +192,13 @@ describe('receive messages via callback', function () {
     payload = {bla: 'foo', arr: [1, 2, false]};
     subscribeTestSuccessfulCallback('test/1', JSON.stringify(payload), payload);
 */
+});
+
+describe('subscribe with wildcard and receive messages via callback', function () {
+    subscribeTestSuccessfulCallback('test/1', 'test/+', 'foo', 'foo');
+    subscribeTestSuccessfulCallback('test/1/2', 'test/+/2', 'bar', 'bar');
+    subscribeTestSuccessfulCallback('test/1/2/3', 'test/#', 'moo', 'moo');
+    subscribeTestSuccessfulCallback('test/1/2/3/4', 'test/+/2/#', 'bla', 'bla');
 });
 
 describe('end', function () {
