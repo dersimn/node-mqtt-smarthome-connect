@@ -57,7 +57,7 @@ class MqttSmarthome extends EventEmitter {
             // is just better ;) Ok for you @Simon?
 
             /**
-             * @event connected
+             * @event MqttSmarthome#connected
              */
             this.emit('connected');
             this.log.debug('mqtt conencted', this.mqttUrl, this.clientId);
@@ -65,7 +65,7 @@ class MqttSmarthome extends EventEmitter {
 
         this.mqtt.on('close', () => {
             /**
-             * @event disconnected
+             * @event MqttSmarthome#disconnected
              */
             this.emit('disconnected');
             this.log.debug('mqtt disconnected');
@@ -91,7 +91,7 @@ class MqttSmarthome extends EventEmitter {
             this.log.debug('mqtt <', topic, payload);
 
             /**
-             * @event message
+             * @event MqttSmarthome#message
              * @param {string} topic
              * @param {string} payload
              * @param {Mqtt.packet} packet Todo add link to MQTT.js docs
@@ -151,7 +151,7 @@ class MqttSmarthome extends EventEmitter {
     /**
      *
      * @param {string} topic
-     * @param {function} [callback=null]
+     * @param {messageCallback} [callback=null]
      * @returns {idSubscription} id
      */
     subscribe(topic, callback = null) {

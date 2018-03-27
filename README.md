@@ -16,26 +16,6 @@
 
 ## API
 
-## Classes
-
-<dl>
-<dt><a href="#MqttSmarthome">MqttSmarthome</a></dt>
-<dd><p>Todo: clarify: rename the lib. Could we call this Module &quot;mqtt-smarthome-connection&quot; on npm and keept the npm name
-&quot;mqtt-smarthome&quot; reserved for a possible future meta-package?</p>
-</dd>
-</dl>
-
-## Events
-
-<dl>
-<dt><a href="#event_connected">"connected"</a></dt>
-<dd></dd>
-<dt><a href="#event_disconnected">"disconnected"</a></dt>
-<dd></dd>
-<dt><a href="#event_message">"message" (topic, payload, packet)</a></dt>
-<dd></dd>
-</dl>
-
 <a name="MqttSmarthome"></a>
 
 ## MqttSmarthome
@@ -54,6 +34,9 @@ Todo: clarify: rename the lib. Could we call this Module "mqtt-smarthome-connect
     * [.publishMulti(basetopic, data, [options])](#MqttSmarthome+publishMulti)
     * [.publishSet(topic, val, [options], [callback])](#MqttSmarthome+publishSet)
     * [.publishStatus(topic, val, [options], [callback])](#MqttSmarthome+publishStatus)
+    * ["connected"](#MqttSmarthome+event_connected)
+    * ["disconnected"](#MqttSmarthome+event_disconnected)
+    * ["message" (topic, payload, packet)](#MqttSmarthome+event_message)
 
 <a name="new_MqttSmarthome_new"></a>
 
@@ -88,7 +71,7 @@ Disconnect from the MQTT broker.
 **Params**
 
 - topic <code>string</code>
-- [callback] <code>function</code> <code> = </code>
+- [callback] <code>messageCallback</code> <code> = </code>
 
 <a name="MqttSmarthome+unsubscribe"></a>
 
@@ -162,18 +145,18 @@ Publish a value on a MQTT-SMart +/status/# topic
 - [options] <code>object</code>
 - [callback] <code>function</code>
 
-<a name="event_connected"></a>
+<a name="MqttSmarthome+event_connected"></a>
 
-## "connected"
-**Kind**: event emitted  
-<a name="event_disconnected"></a>
+### "connected"
+**Kind**: event emitted by [<code>MqttSmarthome</code>](#MqttSmarthome)  
+<a name="MqttSmarthome+event_disconnected"></a>
 
-## "disconnected"
-**Kind**: event emitted  
-<a name="event_message"></a>
+### "disconnected"
+**Kind**: event emitted by [<code>MqttSmarthome</code>](#MqttSmarthome)  
+<a name="MqttSmarthome+event_message"></a>
 
-## "message" (topic, payload, packet)
-**Kind**: event emitted  
+### "message" (topic, payload, packet)
+**Kind**: event emitted by [<code>MqttSmarthome</code>](#MqttSmarthome)  
 **Params**
 
 - topic <code>string</code>
