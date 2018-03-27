@@ -1,7 +1,8 @@
+sudo: required
 language: node_js
 node_js:
   - '6'
-addons:
-  apt:
-    packages:
-    - mosquitto
+before_install:
+  - sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa -y
+  - sudo apt-get update -y
+  - sudo apt-get install mosquitto -y
