@@ -200,6 +200,12 @@ class MqttSmarthome extends EventEmitter {
      * @example publishMulti('sun', {azimuth: 5, altitude: 0} // will publish 5 on the topic sun/azimuth and 0 on the topic sun/altitude.
      */
     publishMulti(basetopic, data, options) {
+        // Todo clarify: Instead of having a separate piblishMulti function we could distinct that by the type of the
+        // topic param. So if publish gets a topic of type object instead of string it knows that this should be a
+        // multi-publish. The data param would get optional and has to be ommited on multi-publishing, it may only
+        // exist if topic is single topic (string). @Simon - what do think? Another Idea would be to handle topics of
+        // type array in a special way too: they would need the data param and just publish the same data on all topics
+        // contained in the topic-array.
         if (typeof data !== 'object') {
             return false;
         }
