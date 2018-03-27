@@ -37,6 +37,10 @@ class MqttSmarthome extends EventEmitter {
             clientId: 'mqttsmarthome-' + shortid.generate()
         }, options);
 
+        // Todo clarify: is there a nicer way to create function aliases?
+        this.sub = this.subscribe;
+        this.pub = this.publish;
+
         /* Todo clarify if we should call connect on instanciatig. I think this would be a convenient behavior. Maybe
             configurable through a default true autoConnect option.
          */
@@ -122,7 +126,8 @@ class MqttSmarthome extends EventEmitter {
     }
 
     // Todo clarify: should we rename subscribe to "sub" and publish to "pub"? Just for convenience. I think it's
-    // clearly enough and less to type ;)
+    // clearly enough and less to type ;) -> Easy solution: provide both, so we have short convinience method names
+    // and long MQTT.js conform ones :-) See line 40
 
     /**
      *
