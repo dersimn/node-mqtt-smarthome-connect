@@ -220,6 +220,8 @@ class MqttSmarthome extends EventEmitter {
         if (typeof options === 'function') {
             callback = options;
             options = {};
+        } else {
+            options = options || {};
         }
         const type = typeof payload;
         if (type === 'object' && !(payload instanceof Buffer)) {
@@ -257,12 +259,18 @@ class MqttSmarthome extends EventEmitter {
 
     /**
      * Publish a value on a MQTT-Smarthome +/set/# topi.
-     * @param topic
-     * @param val
-     * @param options
-     * @param callback
+     * @param {string} topic
+     * @param {*} val
+     * @param {object} [options]
+     * @param {function} [callback]
      */
     publishSet(topic, val, options, callback) {
+        if (typeof options === 'function') {
+            callback = options;
+            options = {};
+        } else {
+            options = options || {};
+        }
         // Todo insert "set" as second topic level if undefined. E.g. "hm//Licht/STATE" becomes "hm/set/Licht/STATE"
         // Todo replace "$" by "var/set/". E.g. "$Automatik/Licht" becomes "var/set/Automatik/Licht"
         this.publish(topic, val, options, callback);
@@ -270,18 +278,25 @@ class MqttSmarthome extends EventEmitter {
 
     /**
      * Publish a value on a MQTT-SMart +/status/# topic
-     * @param topic
-     * @param val
-     * @param options
-     * @param callback
+     * @param {string} topic
+     * @param {*} val
+     * @param {object} [options]
+     * @param {function} [callback]
      */
     publishStatus(topic, val, options, callback) {
+        if (typeof options === 'function') {
+            callback = options;
+            options = {};
+        } else {
+            options = options || {};
+        }
         /* Todo clarify if we also add the lc attribute here. Would mean we have to keep track of all published values.
         @dersimn this would be a good place to provide a time-to-live option and set the unpublish-timeout. what do you
         think? */
         // Todo insert "status" as second topic level if undefined. E.g. "hm//Licht/STATE" becomes "hm/status/Licht/STATE"
         // Todo replace "$" by "var/status/". E.g. "$Automatik/Licht" becomes "var/status/Automatik/Licht"
         const payload = {val, ts: (new Date().getTime())};
+
         if (typeof options.retain === 'undefined') {
             // Retain default true
             options.retain = true;

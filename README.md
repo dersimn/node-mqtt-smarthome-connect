@@ -16,6 +16,26 @@
 
 ## API
 
+## Classes
+
+<dl>
+<dt><a href="#MqttSmarthome">MqttSmarthome</a></dt>
+<dd><p>Todo: clarify: rename the lib. Could we call this Module &quot;mqtt-smarthome-connection&quot; on npm and keept the npm name
+&quot;mqtt-smarthome&quot; reserved for a possible future meta-package?</p>
+</dd>
+</dl>
+
+## Events
+
+<dl>
+<dt><a href="#event_connected">"connected"</a></dt>
+<dd></dd>
+<dt><a href="#event_disconnected">"disconnected"</a></dt>
+<dd></dd>
+<dt><a href="#event_message">"message" (topic, payload, packet)</a></dt>
+<dd></dd>
+</dl>
+
 <a name="MqttSmarthome"></a>
 
 ## MqttSmarthome
@@ -32,8 +52,8 @@ Todo: clarify: rename the lib. Could we call this Module "mqtt-smarthome-connect
     * [.unsubscribe(id)](#MqttSmarthome+unsubscribe) ⇒ <code>number</code>
     * [.publish(topic, payload, [options], [callback])](#MqttSmarthome+publish)
     * [.publishMulti(basetopic, data, [options])](#MqttSmarthome+publishMulti)
-    * [.publishSet(topic, val, options, callback)](#MqttSmarthome+publishSet)
-    * [.publishStatus(topic, val, options, callback)](#MqttSmarthome+publishStatus)
+    * [.publishSet(topic, val, [options], [callback])](#MqttSmarthome+publishSet)
+    * [.publishStatus(topic, val, [options], [callback])](#MqttSmarthome+publishStatus)
 
 <a name="new_MqttSmarthome_new"></a>
 
@@ -118,29 +138,47 @@ publishMulti('sun', {azimuth: 5, altitude: 0} // will publish 5 on the topic sun
 ```
 <a name="MqttSmarthome+publishSet"></a>
 
-### mqttSmarthome.publishSet(topic, val, options, callback)
+### mqttSmarthome.publishSet(topic, val, [options], [callback])
 Publish a value on a MQTT-Smarthome +/set/# topi.
 
 **Kind**: instance method of [<code>MqttSmarthome</code>](#MqttSmarthome)  
 **Params**
 
-- topic
-- val
-- options
-- callback
+- topic <code>string</code>
+- val <code>\*</code>
+- [options] <code>object</code>
+- [callback] <code>function</code>
 
 <a name="MqttSmarthome+publishStatus"></a>
 
-### mqttSmarthome.publishStatus(topic, val, options, callback)
+### mqttSmarthome.publishStatus(topic, val, [options], [callback])
 Publish a value on a MQTT-SMart +/status/# topic
 
 **Kind**: instance method of [<code>MqttSmarthome</code>](#MqttSmarthome)  
 **Params**
 
-- topic
-- val
-- options
-- callback
+- topic <code>string</code>
+- val <code>\*</code>
+- [options] <code>object</code>
+- [callback] <code>function</code>
+
+<a name="event_connected"></a>
+
+## "connected"
+**Kind**: event emitted  
+<a name="event_disconnected"></a>
+
+## "disconnected"
+**Kind**: event emitted  
+<a name="event_message"></a>
+
+## "message" (topic, payload, packet)
+**Kind**: event emitted  
+**Params**
+
+- topic <code>string</code>
+- payload <code>string</code>
+- packet <code>Mqtt.packet</code> - Todo add link to MQTT.js docs
 
 
 ## License
