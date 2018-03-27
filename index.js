@@ -39,13 +39,13 @@ class MqttSmarthome extends EventEmitter {
 
         // Todo clarify: is there a nicer way to create function aliases?
         /**
-         * Just a convenience alias to [subscribe](MqttSmarthome.subscribe)
+         * Just a convenience alias to [subscribe](#MqttSmarthome+subscribe)
          * @type {MqttSmarthome.subscribe}
          */
         this.sub = this.subscribe;
 
         /**
-         * Just a convenience alias to [publish](MqttSmarthome.publish)
+         * Just a convenience alias to [publish](#MqttSmarthome+publish)
          * @type {MqttSmarthome.publish}
          */
         this.pub = this.publish;

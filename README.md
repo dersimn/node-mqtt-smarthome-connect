@@ -64,13 +64,13 @@
 <a name="MqttSmarthome+sub"></a>
 
 ### mqttSmarthome.sub : <code>MqttSmarthome.subscribe</code>
-Just a convenience alias to [subscribe](MqttSmarthome.subscribe)
+Just a convenience alias to [subscribe](#MqttSmarthome+subscribe)
 
 **Kind**: instance property of [<code>MqttSmarthome</code>](#MqttSmarthome)  
 <a name="MqttSmarthome+pub"></a>
 
 ### mqttSmarthome.pub : <code>MqttSmarthome.publish</code>
-Just a convenience alias to [publish](MqttSmarthome.publish)
+Just a convenience alias to [publish](#MqttSmarthome+publish)
 
 **Kind**: instance property of [<code>MqttSmarthome</code>](#MqttSmarthome)  
 <a name="MqttSmarthome+connect"></a>
