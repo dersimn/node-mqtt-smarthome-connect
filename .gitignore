@@ -57,3 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
+# JetBrains IntelliJ / WebStorm / PHPStorm config dir
+.idea
