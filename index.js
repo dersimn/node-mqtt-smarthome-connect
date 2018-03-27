@@ -3,6 +3,11 @@ const Mqtt = require('mqtt');
 const mqttWildcard = require('mqtt-wildcard');
 const shortid = require('shortid');
 
+/**
+ * Todo: clarify: rename the lib. Could we call this Module "mqtt-smarthome-connection" on npm and keept the npm name
+ * "mqtt-smarthome" reserved for a possible future meta-package?
+ */
+
 class MqttSmarthome extends EventEmitter {
     /**
      *
