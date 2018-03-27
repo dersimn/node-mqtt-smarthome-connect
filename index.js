@@ -106,7 +106,7 @@ class MqttSmarthome extends EventEmitter {
                             // @simon let us chat or phone, then i can explain the thought behind that
 
                             /**
-                             * @typedef {function} messageCallback
+                             * @callback {function} messageCallback
                              * @param {string} topic
                              * @param {string|number|boolean|object} payload
                              * @param {Mqtt.packet} packet
