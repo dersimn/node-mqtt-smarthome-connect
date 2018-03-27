@@ -133,6 +133,13 @@ class MqttSmarthome extends EventEmitter {
              @Simon - what do you think? I only use level 0 as of today, but I think having the possibility to use
              higher levels would be good. */
 
+        /* Todo clarify handle topics of type object or instance of array in speacial way. Mqtt.js does this:
+        topic is a String topic to subscribe to or an Array of topics to subscribe to. It can also be an object,
+        it has as object keys the topic name and as value the QoS, like {'test1': 0, 'test2': 1}.
+        Looks nice to me but would generate a problem that has to be solved. Will the callback then be registered on all
+        that topic? It has to i think. But how about unsubscribing then? reutrn an Array of subscription IDs? doable.
+        @simon what do you think?
+         */
         const id = shortid.generate();
         this.callbackIds[id] = topic;
         if (!this.messageCallbacks[topic]) {
@@ -206,6 +213,7 @@ class MqttSmarthome extends EventEmitter {
         // exist if topic is single topic (string). @Simon - what do think? Another Idea would be to handle topics of
         // type array in a special way too: they would need the data param and just publish the same data on all topics
         // contained in the topic-array.
+
         if (typeof data !== 'object') {
             return false;
         }
