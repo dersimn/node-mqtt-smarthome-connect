@@ -59,6 +59,9 @@ class MqttSmarthome extends EventEmitter {
      *
      */
     connect() {
+        // Todo clarify if we should stick to the MQTT.js way with mqsh - no need to use the new operator, connect()
+        // returns a new instance, url and options are passed via the connect function. would make migration of existing
+        // xy2mqtt easier and I think it's good to keep it as similar to MQTT.js as possible. @dersimn what do you think?
         this.mqtt = Mqtt.connect(this.mqttUrl, this.mqttOptions);
 
         this.mqtt.on('connect', () => {
