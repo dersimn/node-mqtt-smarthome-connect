@@ -1,7 +1,11 @@
+/* eslint-disable no-undef, no-unused-vars, prefer-arrow-callback */
+/* global it, describe */
+
 const path = require('path');
-const Mqtt = require('mqtt');
-const MqttSmarthome = require(path.join(__dirname, '..', 'index.js'));
 const should = require('should');
+const Mqtt = require('mqtt');
+
+const MqttSmarthome = require(path.join(__dirname, '..', 'index.js'));
 
 describe('mqtt connection', function () {
     let mqsh;

@@ -41,5 +41,10 @@
       "test.js",
       "benchmark.js"
     ]
+  },
+  "nyc": {
+    "include": [
+      "index.js"
+    ]
   }
 }
