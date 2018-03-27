@@ -195,10 +195,13 @@ class MqttSmarthome extends EventEmitter {
         const id = shortid.generate();
         this.callbackIds[id] = topic;
         if (!this.messageCallbacks[topic]) {
+            // First subscription on that topic
             this.messageCallbacks[topic] = {};
+            // Todo check if topic is a non-empty string before subscribing;
+            this.mqtt.subscribe(topic);
         }
         this.messageCallbacks[topic][id] = callback;
-        this.mqtt.subscribe(topic);
+
         return id;
     }
 
@@ -249,6 +252,7 @@ class MqttSmarthome extends EventEmitter {
             payload = String(payload);
         }
         this.log.debug('mqtt >', topic, payload);
+        // Todo check if topic is a non-empty string before calling mqtt.publish?
         this.mqtt.publish(topic, payload, options, callback);
     }
 
