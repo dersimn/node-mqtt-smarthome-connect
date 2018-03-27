@@ -49,6 +49,8 @@ class MqttSmarthome extends EventEmitter {
         this.mqtt = Mqtt.connect(this.mqttUrl, this.mqttOptions);
 
         this.mqtt.on('connect', () => {
+            // Todo clarify: I'd like to stick to the event names of MQTT.js. Makes porting to mqtt-smarthome easier and
+            // is just better ;) Ok for you @Simon?
             this.emit('connected');
             this.log.debug('mqtt conencted', this.mqttUrl, this.clientId);
         });
@@ -135,7 +137,7 @@ class MqttSmarthome extends EventEmitter {
             level, could be done in the callbackIds object, instead of saving the string topic we could save am object
             like {topic: 'the/topic/', qos: 2} and introduce a new cache that holds all IDs belonging to a specific
             topic.
-             @Simon - what do you think? I only use level 0 as of today, but I think having the possibility to use
+             @dersimn - what do you think? I only use level 0 as of today, but I think having the possibility to use
              higher levels would be good. */
 
         /* Todo clarify handle topics of type object or instance of array in speacial way. Mqtt.js does this:
@@ -215,7 +217,7 @@ class MqttSmarthome extends EventEmitter {
         // Todo clarify: Instead of having a separate piblishMulti function we could distinct that by the type of the
         // topic param. So if publish gets a topic of type object instead of string it knows that this should be a
         // multi-publish. The data param would get optional and has to be ommited on multi-publishing, it may only
-        // exist if topic is single topic (string). @Simon - what do think? Another Idea would be to handle topics of
+        // exist if topic is single topic (string). @dersimn - what do think? Another Idea would be to handle topics of
         // type array in a special way too: they would need the data param and just publish the same data on all topics
         // contained in the topic-array.
 
@@ -249,7 +251,7 @@ class MqttSmarthome extends EventEmitter {
      */
     publishStatus(topic, val, options, callback) {
         /* Todo clarify if we also add the lc attribute here. Would mean we have to keep track of all published values.
-        @Simon this would be a good place to provide a time-to-live option and set the unpublish-timeout. what do you
+        @dersimn this would be a good place to provide a time-to-live option and set the unpublish-timeout. what do you
         think? */
         // Todo insert "status" as second topic level if undefined. E.g. "hm//Licht/STATE" becomes "hm/status/Licht/STATE"
         // Todo replace "$" by "var/status/". E.g. "$Automatik/Licht" becomes "var/status/Automatik/Licht"
