@@ -20,9 +20,7 @@
 
 <dl>
 <dt><a href="#MqttSmarthome">MqttSmarthome</a></dt>
-<dd><p>Todo: clarify: rename the lib. Could we call this Module &quot;mqtt-smarthome-connection&quot; on npm and keept the npm name
-&quot;mqtt-smarthome&quot; reserved for a possible future meta-package?</p>
-</dd>
+<dd></dd>
 </dl>
 
 ## Typedefs
@@ -35,13 +33,12 @@
 <a name="MqttSmarthome"></a>
 
 ## MqttSmarthome
-Todo: clarify: rename the lib. Could we call this Module "mqtt-smarthome-connection" on npm and keept the npm name
-"mqtt-smarthome" reserved for a possible future meta-package?
-
 **Kind**: global class  
 
 * [MqttSmarthome](#MqttSmarthome)
     * [new MqttSmarthome([mqttUrl], [options])](#new_MqttSmarthome_new)
+    * [.sub](#MqttSmarthome+sub) : <code>MqttSmarthome.subscribe</code>
+    * [.pub](#MqttSmarthome+pub) : <code>MqttSmarthome.publish</code>
     * [.connect()](#MqttSmarthome+connect)
     * [.end([force], [callback])](#MqttSmarthome+end)
     * [.subscribe(topic, [callback])](#MqttSmarthome+subscribe) ⇒ <code>idSubscription</code>
@@ -64,6 +61,18 @@ Todo: clarify: rename the lib. Could we call this Module "mqtt-smarthome-connect
     - [.logger] <code>object</code>
     - [.clientId] <code>string</code> <code> = &quot;mqttsmarthome-&lt;random&gt;&quot;</code>
 
+<a name="MqttSmarthome+sub"></a>
+
+### mqttSmarthome.sub : <code>MqttSmarthome.subscribe</code>
+Just a convenience alias to [subscribe](MqttSmarthome.subscribe)
+
+**Kind**: instance property of [<code>MqttSmarthome</code>](#MqttSmarthome)  
+<a name="MqttSmarthome+pub"></a>
+
+### mqttSmarthome.pub : <code>MqttSmarthome.publish</code>
+Just a convenience alias to [publish](MqttSmarthome.publish)
+
+**Kind**: instance property of [<code>MqttSmarthome</code>](#MqttSmarthome)  
 <a name="MqttSmarthome+connect"></a>
 
 ### mqttSmarthome.connect()

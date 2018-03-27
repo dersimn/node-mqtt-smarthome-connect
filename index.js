@@ -3,9 +3,9 @@ const Mqtt = require('mqtt');
 const mqttWildcard = require('mqtt-wildcard');
 const shortid = require('shortid');
 
-/**
- * Todo: clarify: rename the lib. Could we call this Module "mqtt-smarthome-connection" on npm and keept the npm name
- * "mqtt-smarthome" reserved for a possible future meta-package?
+/*
+  Todo: clarify: rename the lib. Could we call this Module "mqtt-smarthome-connection" on npm and keept the npm name
+  "mqtt-smarthome" reserved for a possible future meta-package?
  */
 
 class MqttSmarthome extends EventEmitter {
@@ -38,7 +38,16 @@ class MqttSmarthome extends EventEmitter {
         }, options);
 
         // Todo clarify: is there a nicer way to create function aliases?
+        /**
+         * Just a convenience alias to [subscribe](MqttSmarthome.subscribe)
+         * @type {MqttSmarthome.subscribe}
+         */
         this.sub = this.subscribe;
+
+        /**
+         * Just a convenience alias to [publish](MqttSmarthome.publish)
+         * @type {MqttSmarthome.publish}
+         */
         this.pub = this.publish;
 
         /* Todo clarify if we should call connect on instanciatig. I think this would be a convenient behavior. Maybe
