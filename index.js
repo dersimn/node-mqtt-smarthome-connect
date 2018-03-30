@@ -208,9 +208,9 @@ class MqttSmarthome extends EventEmitter {
      * @param {idSubscription} id an id that was returned by the [subscribe()](#MqttSmarthome+subscribe) method.
      * @returns {number} remaining number of subscription on that topic
      */
-    unsubscribe(id) {
+    unregisterCallback(id) {
         const topic = this.callbackIds[id];
-        if (topic) {
+        if (topic && (typeof this.messageCallbacks[topic] === 'object')) {
             delete this.messageCallbacks[topic][id];
             const length = Object.keys(this.messageCallbacks[topic]).length;
             if (length === 0) {
@@ -220,6 +220,19 @@ class MqttSmarthome extends EventEmitter {
             return length;
         }
         return 0;
+    }
+
+    /**
+     * Unsubscribe a whole topic with all its callbacks.
+     *
+     * @param {string} topic
+     * @param {function} [callback]
+     */
+    unsubscribe(topic, callback) {
+        if (Boolean(topic)) {
+            this.mqtt.unsubscribe(topic, callback);
+            delete this.messageCallbacks[topic];
+        }
     }
 
     /**
