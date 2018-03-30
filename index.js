@@ -3,10 +3,6 @@ const Mqtt = require('mqtt');
 const mqttWildcard = require('mqtt-wildcard');
 const shortid = require('shortid');
 
-/*
-  Todo: clarify: rename the lib. Could we call this Module "mqtt-smarthome-connection" on npm and keept the npm name
-  "mqtt-smarthome" reserved for a possible future meta-package?
- */
 
 class MqttSmarthome extends EventEmitter {
     /**
@@ -147,9 +143,6 @@ class MqttSmarthome extends EventEmitter {
     }
 
     _parsePayload(payload) {
-        /* Todo clarify what to do with Buffer (binary) payloads? Do we want to support them? I think we should.
-            Solution: don't bother. The raw payload is available in packet.payload.
-          */
         payload = payload.toString();
 
         /* Todo clarify extract this type-guessing stuff into an own function or even module or is this exaggerated? */
@@ -168,10 +161,6 @@ class MqttSmarthome extends EventEmitter {
         }
         return payload;
     }
-
-    // Todo clarify: should we rename subscribe to "sub" and publish to "pub"? Just for convenience. I think it's
-    // clearly enough and less to type ;) -> Easy solution: provide both, so we have short convinience method names
-    // and long MQTT.js conform ones :-) See line 40
 
     /**
      *
