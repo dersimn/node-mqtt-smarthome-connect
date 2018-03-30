@@ -258,22 +258,24 @@ class MqttSmarthome extends EventEmitter {
      * @param {string} basetopic
      * @param {object} data
      * @param {object} [options] see [publish](#MqttSmarthome+publish)
-     * @example publishMulti('sun', {azimuth: 5, altitude: 0} // will publish 5 on the topic sun/azimuth and 0 on the topic sun/altitude.
+     * @param {number} splitLevel until which the data object will be split into topics
+     * @example publishMulti('sun', {azimuth: 5, altitude: 0}); // publishes 2 topics: sun/azimuth:5; sun/altitude:0
+     * @example publishMulti('light', {hsv: {hue: 255, bri: 100; sat: 50}}, 1); // publishes 1 topic: light/hsv:{hue: 255, bri: 100; sat: 50}
+     * @example publishMulti('light', {hsv: {hue: 255, bri: 100; sat: 50}}, 2); // publishes 3 topics: light/hsv/hue:255; light/hsv/bri:100; light/hsv/sat: 50
      */
-    publishMulti(basetopic, data, options) {
-        // Todo clarify: Instead of having a separate piblishMulti function we could distinct that by the type of the
-        // topic param. So if publish gets a topic of type object instead of string it knows that this should be a
-        // multi-publish. The data param would get optional and has to be ommited on multi-publishing, it may only
-        // exist if topic is single topic (string). @dersimn - what do think? Another Idea would be to handle topics of
-        // type array in a special way too: they would need the data param and just publish the same data on all topics
-        // contained in the topic-array.
-
-        if (typeof data !== 'object') {
-            return false;
+    publishMulti(basetopic, data, options, splitLevel = 1) {
+        this.log.debug('publishMulti', basetopic, data, options, splitLevel);
+        if ( splitLevel == 0 ) {
+            this.publish(basetopic, data, options);
+        } else {
+            Object.keys(data).forEach(datapoint => {
+                if ( typeof data[datapoint] === "object" ) {
+                    this.publishMulti(basetopic + "/" + datapoint, data[datapoint], options, splitLevel-1);
+                } else {
+                    this.publishMulti(basetopic + "/" + datapoint, data[datapoint], options, 0);
+                }
+            });
         }
-        Object.keys(data).forEach(topic => {
-            this.publish(basetopic + '/' + topic, data[topic], options);
-        });
     }
 
     /**
