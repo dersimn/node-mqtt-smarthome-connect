@@ -31,7 +31,7 @@ function start() {
     });
     it('mqsh connect to mqtt', function (done) {
         this.timeout(5000);
-        mqsh.on('connected', function () {
+        mqsh.on('connect', function () {
             mqtt.removeAllListeners();
             done();
         });
@@ -42,7 +42,7 @@ function start() {
 function end() {
     it('mqsh disconnect from mqtt', function (done) {
         this.timeout(5000);
-        mqsh.on('disconnected', function () {
+        mqsh.on('close', function () {
             mqtt.removeAllListeners();
             done();
         });
@@ -97,7 +97,7 @@ function subscribeTestSuccessfulCallback(testTopicPub, testTopicSub, testPayload
     it('unsubscribe ' + testTopicSub, function (done) {
         debug('mqsh unsub', testTopicSub, subId, 'count before decrement:' + subCount);
         subCount -= 1;
-        mqsh.unsubscribe(subId).should.equal(subCount);
+        mqsh.unregisterCallback(subId).should.equal(subCount);
         done();
     });
 }
@@ -126,7 +126,7 @@ function subscribeTestSuccessfulEvent(testTopicPub, testTopicSub, testPayloadPub
     it('unsubscribe ' + testTopicSub, function (done) {
         debug('mqsh unsub', testTopicSub, subId, 'count before decrement:' + subCount);
         subCount -= 1;
-        mqsh.unsubscribe(subId).should.equal(subCount);
+        mqsh.unregisterCallback(subId).should.equal(subCount);
         done();
     });
 }
