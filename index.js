@@ -254,6 +254,9 @@ class MqttSmarthome extends EventEmitter {
      * @param {function} [callback] Fired when the QoS handling completes, or at the next tick if QoS 0. An error occurs if client is disconnecting.
      */
     publish(topic, payload, options, callback) {
+        if (!topic) {
+            return;
+        }
         if (typeof options === 'function') {
             callback = options;
             options = {};
@@ -267,8 +270,12 @@ class MqttSmarthome extends EventEmitter {
             payload = String(payload);
         }
         this.log.debug('mqtt >', topic, payload);
-        if (topic) {
+        if (typeof callback === 'function') {
             this.mqtt.publish(topic, payload, options, callback);
+        } else {
+            this.mqtt.publish(topic, payload, options, err => {
+                log.error('mqtt > error', err);
+            });
         }
     }
 
