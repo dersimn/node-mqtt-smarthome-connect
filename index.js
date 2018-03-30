@@ -3,7 +3,6 @@ const Mqtt = require('mqtt');
 const mqttWildcard = require('mqtt-wildcard');
 const shortid = require('shortid');
 
-
 class MqttSmarthome extends EventEmitter {
     /**
      *
@@ -176,7 +175,7 @@ class MqttSmarthome extends EventEmitter {
      * @returns {idSubscription} id
      */
     subscribe(topic, callback = null) {
-        if(!Boolean(topic)) {
+        if (!topic) {
             return null;
         }
         // Todo clarify if we need callback default null. Wouldn't undefined be ok?
@@ -236,7 +235,7 @@ class MqttSmarthome extends EventEmitter {
      * @param {function} [callback]
      */
     unsubscribe(topic, callback) {
-        if (Boolean(topic)) {
+        if (topic) {
             this.mqtt.unsubscribe(topic, callback);
             delete this.messageCallbacks[topic];
         }
@@ -268,7 +267,7 @@ class MqttSmarthome extends EventEmitter {
             payload = String(payload);
         }
         this.log.debug('mqtt >', topic, payload);
-        if(Boolean(topic)) {
+        if (topic) {
             this.mqtt.publish(topic, payload, options, callback);
         }
     }
@@ -286,14 +285,14 @@ class MqttSmarthome extends EventEmitter {
      */
     publishMulti(basetopic, data, options, splitLevel = 1) {
         this.log.debug('publishMulti', basetopic, data, options, splitLevel);
-        if ( splitLevel == 0 ) {
+        if (splitLevel === 0) {
             this.publish(basetopic, data, options);
         } else {
             Object.keys(data).forEach(datapoint => {
-                if ( typeof data[datapoint] === "object" ) {
-                    this.publishMulti(basetopic + "/" + datapoint, data[datapoint], options, splitLevel-1);
+                if (typeof data[datapoint] === 'object') {
+                    this.publishMulti(basetopic + '/' + datapoint, data[datapoint], options, splitLevel - 1);
                 } else {
-                    this.publishMulti(basetopic + "/" + datapoint, data[datapoint], options, 0);
+                    this.publishMulti(basetopic + '/' + datapoint, data[datapoint], options, 0);
                 }
             });
         }
