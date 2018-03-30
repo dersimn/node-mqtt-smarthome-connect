@@ -65,36 +65,42 @@ class MqttSmarthome extends EventEmitter {
         this.mqtt = Mqtt.connect(this.mqttUrl, this.mqttOptions);
 
         this.mqtt.on('connect', () => {
-            // Todo clarify: I'd like to stick to the event names of MQTT.js. Makes porting to mqtt-smarthome easier and
-            // is just better ;) Ok for you @Simon?
-
             /**
-             * @event MqttSmarthome#connected
+             * @event MqttSmarthome#connect
              */
-            this.emit('connected');
-            this.log.debug('mqtt conencted', this.mqttUrl, this.clientId);
+            this.emit('connect');
+            this.log.debug('mqtt connect', this.mqttUrl, this.clientId);
         });
 
         this.mqtt.on('close', () => {
             /**
-             * @event MqttSmarthome#disconnected
+             * @event MqttSmarthome#close
              */
-            this.emit('disconnected');
-            this.log.debug('mqtt disconnected');
+            this.emit('close');
+            this.log.debug('mqtt close');
         });
 
         this.mqtt.on('error', err => {
-            // Todo: clarify if we should emit this event - i think we should
-            this.log.error('mqtt', err.toString());
+            /**
+             * @event MqttSmarthome#error
+             */
+            this.emit('error', err);
+            this.log.error('mqtt error', err.toString());
         });
 
         this.mqtt.on('offline', () => {
-            // Todo: clarify if we should emit this event - i think we should
+            /**
+             * @event MqttSmarthome#offline
+             */
+            this.emit('offline');
             this.log.error('mqtt offline');
         });
 
         this.mqtt.on('reconnect', () => {
-            // Todo: clarify if we should emit this event - i think we should
+            /**
+             * @event MqttSmarthome#reconnect
+             */
+            this.emit('reconnect');
             this.log.info('mqtt reconnect');
         });
 
