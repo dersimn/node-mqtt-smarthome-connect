@@ -112,7 +112,7 @@ class MqttSmarthome extends EventEmitter {
              * @event MqttSmarthome#message
              * @param {string} topic
              * @param {string} payload
-             * @param {Mqtt.packet} packet Todo add link to MQTT.js docs
+             * @param {Mqtt.packet} packet, see https://github.com/mqttjs/mqtt-packet#publish
              */
             this.emit('message', topic, payload, packet);
 
