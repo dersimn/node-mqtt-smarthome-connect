@@ -275,13 +275,7 @@ class MqttSmarthome extends EventEmitter {
             payload = String(payload);
         }
         this.log.debug('mqtt >', topic, payload);
-        if (typeof callback === 'function') {
-            this.mqtt.publish(topic, payload, options, callback);
-        } else {
-            this.mqtt.publish(topic, payload, options, err => {
-                this.log.error('mqtt > error', err);
-            });
-        }
+        this.mqtt.publish(topic, payload, options, callback);
     }
 
     /**
