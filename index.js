@@ -247,8 +247,9 @@ class MqttSmarthome extends EventEmitter {
             payload = String(payload);
         }
         this.log.debug('mqtt >', topic, payload);
-        // Todo check if topic is a non-empty string before calling mqtt.publish?
-        this.mqtt.publish(topic, payload, options, callback);
+        if(Boolean(topic)) {
+            this.mqtt.publish(topic, payload, options, callback);
+        }
     }
 
     /**
