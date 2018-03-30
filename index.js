@@ -9,6 +9,7 @@ class MqttSmarthome extends EventEmitter {
      * @param {string} [mqttUrl=mqtt://localhost]
      * @param {object} [options] see all available options in the [MQTT.js docs](https://github.com/mqttjs/MQTT.js#client)
      * @param {object} [options.logger]
+     * @param {object} [options.globalOptions] that'll overwrite options given in [publish(topic, payload, options, callback)](#MqttSmarthome+publish)
      * @param {string} [options.clientId=mqttsmarthome-<random>]
      */
     constructor(mqttUrl = 'mqtt://localhost', options = {}) {
@@ -23,9 +24,11 @@ class MqttSmarthome extends EventEmitter {
             warn: () => {},
             error: () => {}
         };
+        this.globalOptions = options.globalOptions || {};
 
         // Delete non-MQTT.js options (Todo clarify necessary?)
         delete options.logger;
+        delete options.globalOptions;
 
         this.mqttUrl = mqttUrl;
         this.mqttOptions = Object.assign({
@@ -263,6 +266,8 @@ class MqttSmarthome extends EventEmitter {
         } else {
             options = options || {};
         }
+        Object.assign(options, this.globalOptions);
+
         const type = typeof payload;
         if (type === 'object' && !(payload instanceof Buffer)) {
             payload = JSON.stringify(payload);
@@ -274,7 +279,7 @@ class MqttSmarthome extends EventEmitter {
             this.mqtt.publish(topic, payload, options, callback);
         } else {
             this.mqtt.publish(topic, payload, options, err => {
-                log.error('mqtt > error', err);
+                this.log.error('mqtt > error', err);
             });
         }
     }
