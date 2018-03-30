@@ -169,6 +169,9 @@ class MqttSmarthome extends EventEmitter {
      * @returns {idSubscription} id
      */
     subscribe(topic, callback = null) {
+        if(!Boolean(topic)) {
+            return null;
+        }
         // Todo clarify if we need callback default null. Wouldn't undefined be ok?
         /* Todo clarify if we should have the possiblity to set the QoS level. Will become difficult as there could be
             more than 1 subscriptions on the same topic with different callbacks. Solution could be to always subscribe
@@ -189,10 +192,8 @@ class MqttSmarthome extends EventEmitter {
          */
         const id = shortid.generate();
         this.callbackIds[id] = topic;
-        if (!this.messageCallbacks[topic]) {
-            // First subscription on that topic
+        if (!this.messageCallbacks[topic]) { // First subscription on that topic
             this.messageCallbacks[topic] = {};
-            // Todo check if topic is a non-empty string before subscribing;
             this.mqtt.subscribe(topic);
         }
         this.messageCallbacks[topic][id] = callback;
