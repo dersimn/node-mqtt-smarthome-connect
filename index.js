@@ -142,6 +142,13 @@ class MqttSmarthome extends EventEmitter {
         this.mqtt.end(force, callback);
     }
 
+    /**
+     * Reconnect to the MQTT broker.
+     */
+    reconnect() {
+        this.mqtt.reconnect();
+    }
+
     _parsePayload(payload) {
         payload = payload.toString();
 
