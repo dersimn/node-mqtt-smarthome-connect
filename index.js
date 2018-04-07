@@ -266,7 +266,7 @@ class MqttSmarthome extends EventEmitter {
         } else {
             options = options || {};
         }
-        Object.assign(options, this.globalOptions);
+        Object.assign(this.globalOptions, options);
 
         const type = typeof payload;
         if (type === 'object' && !(payload instanceof Buffer)) {
