@@ -115,7 +115,8 @@ class MqttSmarthome extends EventEmitter {
             this.emit('message', topic, payload, packet);
 
             Object.keys(this.messageCallbacks).forEach(callbackTopic => {
-                if (mqttWildcard(topic, callbackTopic) && this.messageCallbacks[callbackTopic]) {
+                const wildcardMatch = mqttWildcard(topic, callbackTopic);
+                if (wildcardMatch && this.messageCallbacks[callbackTopic]) {
                     Object.keys(this.messageCallbacks[callbackTopic]).forEach(id => {
                         if (typeof this.messageCallbacks[callbackTopic][id] === 'function') {
                             // Todo clarify (optional) topic shortening (replace +/status/# with +//#)
@@ -127,7 +128,7 @@ class MqttSmarthome extends EventEmitter {
                              * @param {string|number|boolean|object} payload
                              * @param {Mqtt.packet} packet
                              */
-                            this.messageCallbacks[callbackTopic][id](topic, payload, packet);
+                            this.messageCallbacks[callbackTopic][id](topic, payload, wildcardMatch, packet);
                         }
                     });
                 }
