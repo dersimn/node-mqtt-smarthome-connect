@@ -153,23 +153,11 @@ class MqttSmarthome extends EventEmitter {
     }
 
     _parsePayload(payload) {
-        payload = payload.toString();
-
-        /* Todo clarify extract this type-guessing stuff into an own function or even module or is this exaggerated? */
-        if (payload.indexOf('{') !== -1) {
-            try {
-                payload = JSON.parse(payload);
-            } catch (err) {
-                this.log.error(err.toString());
-            }
-        } else if (payload === 'false') {
-            payload = false;
-        } else if (payload === 'true') {
-            payload = true;
-        } else if (!isNaN(payload)) {
-            payload = parseFloat(payload);
+        try {
+            return JSON.parse(payload);
+        } catch (err) {
+            return String(payload);
         }
-        return payload;
     }
 
     /**
