@@ -170,6 +170,13 @@ class MqttSmarthome extends EventEmitter {
         if (!topic) {
             return null;
         }
+        if (Array.isArray(topic)) {
+            const ids = []; //TODO: clarify array or object
+            topic.forEach(singleTopic => {
+                ids.push(this.subscribe(singleTopic, callback));
+            });
+            return ids;
+        }
         // Todo clarify if we need callback default null. Wouldn't undefined be ok?
         /* Todo clarify if we should have the possiblity to set the QoS level. Will become difficult as there could be
             more than 1 subscriptions on the same topic with different callbacks. Solution could be to always subscribe
@@ -181,7 +188,7 @@ class MqttSmarthome extends EventEmitter {
              @dersimn - what do you think? I only use level 0 as of today, but I think having the possibility to use
              higher levels would be good. */
 
-        /* Todo clarify handle topics of type object or instance of array in speacial way. Mqtt.js does this:
+        /* Todo clarify handle topics of type object in speacial way. Mqtt.js does this:
         topic is a String topic to subscribe to or an Array of topics to subscribe to. It can also be an object,
         it has as object keys the topic name and as value the QoS, like {'test1': 0, 'test2': 1}.
         Looks nice to me but would generate a problem that has to be solved. Will the callback then be registered on all
