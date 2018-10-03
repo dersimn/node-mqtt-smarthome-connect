@@ -126,6 +126,7 @@ class MqttSmarthome extends EventEmitter {
                              * @callback {function} messageCallback
                              * @param {string} topic
                              * @param {string|number|boolean|object} payload
+                             * @param {array} [wildcardMatch] If subscription was example/+/foo/bar this array contains the "+" in topic string
                              * @param {Mqtt.packet} packet
                              */
                             this.messageCallbacks[callbackTopic][id](topic, payload, wildcardMatch, packet);
@@ -171,7 +172,7 @@ class MqttSmarthome extends EventEmitter {
             return null;
         }
         if (Array.isArray(topic)) {
-            const ids = []; //TODO: clarify array or object
+            const ids = []; // Todo: clarify array or object
             topic.forEach(singleTopic => {
                 ids.push(this.subscribe(singleTopic, callback));
             });
@@ -281,7 +282,6 @@ class MqttSmarthome extends EventEmitter {
      * @param {object} data
      * @param {object} [options] see [publish](#MqttSmarthome+publish)
      * @param {number} splitLevel until which the data object will be split into topics
-     * @example publishMulti('sun', {azimuth: 5, altitude: 0}); // publishes 2 topics: sun/azimuth:5; sun/altitude:0
      * @example publishMulti('light', {hsv: {hue: 255, bri: 100; sat: 50}}, 1); // publishes 1 topic: light/hsv:{hue: 255, bri: 100; sat: 50}
      * @example publishMulti('light', {hsv: {hue: 255, bri: 100; sat: 50}}, 2); // publishes 3 topics: light/hsv/hue:255; light/hsv/bri:100; light/hsv/sat: 50
      */
@@ -298,53 +298,6 @@ class MqttSmarthome extends EventEmitter {
                 }
             });
         }
-    }
-
-    /**
-     * Publish a value on a MQTT-Smarthome +/set/# topi.
-     * @param {string} topic
-     * @param {*} val
-     * @param {object} [options]
-     * @param {function} [callback]
-     */
-    publishSet(topic, val, options, callback) {
-        if (typeof options === 'function') {
-            callback = options;
-            options = {};
-        } else {
-            options = options || {};
-        }
-        // Todo insert "set" as second topic level if undefined. E.g. "hm//Licht/STATE" becomes "hm/set/Licht/STATE"
-        // Todo replace "$" by "var/set/". E.g. "$Automatik/Licht" becomes "var/set/Automatik/Licht"
-        this.publish(topic, val, options, callback);
-    }
-
-    /**
-     * Publish a value on a MQTT-SMart +/status/# topic
-     * @param {string} topic
-     * @param {*} val
-     * @param {object} [options]
-     * @param {function} [callback]
-     */
-    publishStatus(topic, val, options, callback) {
-        if (typeof options === 'function') {
-            callback = options;
-            options = {};
-        } else {
-            options = options || {};
-        }
-        /* Todo clarify if we also add the lc attribute here. Would mean we have to keep track of all published values.
-        @dersimn this would be a good place to provide a time-to-live option and set the unpublish-timeout. what do you
-        think? */
-        // Todo insert "status" as second topic level if undefined. E.g. "hm//Licht/STATE" becomes "hm/status/Licht/STATE"
-        // Todo replace "$" by "var/status/". E.g. "$Automatik/Licht" becomes "var/status/Automatik/Licht"
-        const payload = {val, ts: (new Date().getTime())};
-
-        if (typeof options.retain === 'undefined') {
-            // Retain default true
-            options.retain = true;
-        }
-        this.publish(topic, payload, options, callback);
     }
 }
 
