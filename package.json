@@ -1,6 +1,6 @@
 {
   "name": "mqtt-smarthome-connect",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Node library for MQTT-Smarthome",
   "main": "index.js",
   "scripts": {
