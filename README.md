@@ -2,9 +2,8 @@
 
 [![mqtt-smarthome](https://img.shields.io/badge/mqtt-smarthome-blue.svg)](https://github.com/mqtt-smarthome/mqtt-smarthome)
 [![NPM version](https://badge.fury.io/js/mqtt-smarthome-connect.svg)](http://badge.fury.io/js/mqtt-smarthome-connect)
-[![Dependency Status](https://img.shields.io/gemnasium/dersimn/mqtt-smarthome-connect.svg?maxAge=2592000)](https://gemnasium.com/github.com/dersimn/mqtt-smarthome)
-[![Build Status](https://travis-ci.org/dersimn/node-mqtt-smarthome.svg?branch=master)](https://travis-ci.org/dersimn/node-mqtt-smarthome)
-[![Coverage Status](https://coveralls.io/repos/github/dersimn/node-mqtt-smarthome/badge.svg?branch=master)](https://coveralls.io/github/dersimn/node-mqtt-smarthome?branch=master)
+[![Build Status](https://travis-ci.org/dersimn/node-mqtt-smarthome-connect.svg?branch=master)](https://travis-ci.org/dersimn/node-mqtt-smarthome-connect)
+[![Coverage Status](https://coveralls.io/repos/github/dersimn/node-mqtt-smarthome-connect/badge.svg?branch=master)](https://coveralls.io/github/dersimn/node-mqtt-smarthome-connect?branch=master)
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 [![License][mit-badge]][mit-url]
 
@@ -62,8 +61,6 @@ mqsh.publish('test/1', 'foo');
     * [.unsubscribe(topic, [callback])](#MqttSmarthome+unsubscribe)
     * [.publish(topic, payload, [options], [callback])](#MqttSmarthome+publish)
     * [.publishMulti(basetopic, data, [options], splitLevel)](#MqttSmarthome+publishMulti)
-    * [.publishSet(topic, val, [options], [callback])](#MqttSmarthome+publishSet)
-    * [.publishStatus(topic, val, [options], [callback])](#MqttSmarthome+publishStatus)
     * ["connect"](#MqttSmarthome+event_connect)
     * ["close"](#MqttSmarthome+event_close)
     * ["error"](#MqttSmarthome+event_error)
@@ -181,42 +178,12 @@ The basetopic is appended by the properties name.
 
 **Example**  
 ```js
-publishMulti('sun', {azimuth: 5, altitude: 0}); // publishes 2 topics: sun/azimuth:5; sun/altitude:0
-```
-**Example**  
-```js
 publishMulti('light', {hsv: {hue: 255, bri: 100; sat: 50}}, 1); // publishes 1 topic: light/hsv:{hue: 255, bri: 100; sat: 50}
 ```
 **Example**  
 ```js
 publishMulti('light', {hsv: {hue: 255, bri: 100; sat: 50}}, 2); // publishes 3 topics: light/hsv/hue:255; light/hsv/bri:100; light/hsv/sat: 50
 ```
-<a name="MqttSmarthome+publishSet"></a>
-
-### mqttSmarthome.publishSet(topic, val, [options], [callback])
-Publish a value on a MQTT-Smarthome +/set/# topi.
-
-**Kind**: instance method of [<code>MqttSmarthome</code>](#MqttSmarthome)  
-**Params**
-
-- topic <code>string</code>
-- val <code>\*</code>
-- [options] <code>object</code>
-- [callback] <code>function</code>
-
-<a name="MqttSmarthome+publishStatus"></a>
-
-### mqttSmarthome.publishStatus(topic, val, [options], [callback])
-Publish a value on a MQTT-SMart +/status/# topic
-
-**Kind**: instance method of [<code>MqttSmarthome</code>](#MqttSmarthome)  
-**Params**
-
-- topic <code>string</code>
-- val <code>\*</code>
-- [options] <code>object</code>
-- [callback] <code>function</code>
-
 <a name="MqttSmarthome+event_connect"></a>
 
 ### "connect"
@@ -255,6 +222,7 @@ Publish a value on a MQTT-SMart +/status/# topic
 
 - topic <code>string</code>
 - payload <code>string</code> | <code>number</code> | <code>boolean</code> | <code>object</code>
+- [wildcardMatch] <code>array</code> - If subscription was example/+/foo/bar this array contains the "+" in topic string
 - packet <code>Mqtt.packet</code>
 
 
