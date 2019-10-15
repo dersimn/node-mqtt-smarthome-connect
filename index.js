@@ -285,31 +285,6 @@ class MqttSmarthome extends EventEmitter {
         this.log.debug('mqtt >', topic, payload);
         this.mqtt.publish(topic, payload, options, callback);
     }
-
-    /**
-     * Publish multiple messages at once. Every property value of the object data is published as a distinct message.
-     * The basetopic is appended by the properties name.
-     * @param {string} basetopic
-     * @param {object} data
-     * @param {object} [options] see [publish](#MqttSmarthome+publish)
-     * @param {number} splitLevel until which the data object will be split into topics
-     * @example publishMulti('light', {hsv: {hue: 255, bri: 100; sat: 50}}, 1); // publishes 1 topic: light/hsv:{hue: 255, bri: 100; sat: 50}
-     * @example publishMulti('light', {hsv: {hue: 255, bri: 100; sat: 50}}, 2); // publishes 3 topics: light/hsv/hue:255; light/hsv/bri:100; light/hsv/sat: 50
-     */
-    publishMulti(basetopic, data, options, splitLevel = 1) {
-        this.log.debug('publishMulti', basetopic, data, options, splitLevel);
-        if (splitLevel === 0) {
-            this.publish(basetopic, data, options);
-        } else {
-            Object.keys(data).forEach(datapoint => {
-                if (typeof data[datapoint] === 'object') {
-                    this.publishMulti(basetopic + '/' + datapoint, data[datapoint], options, splitLevel - 1);
-                } else {
-                    this.publishMulti(basetopic + '/' + datapoint, data[datapoint], options, 0);
-                }
-            });
-        }
-    }
 }
 
 module.exports = MqttSmarthome;
