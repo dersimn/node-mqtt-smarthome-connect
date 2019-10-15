@@ -1,4 +1,4 @@
-# node-mqtt-smarthome
+# node-mqtt-smarthome-connect
 
 [![mqtt-smarthome](https://img.shields.io/badge/mqtt-smarthome-blue.svg)](https://github.com/mqtt-smarthome/mqtt-smarthome)
 [![NPM version](https://badge.fury.io/js/mqtt-smarthome-connect.svg)](http://badge.fury.io/js/mqtt-smarthome-connect)
@@ -19,14 +19,28 @@ handling of topics and payloads following the
 `$ npm install mqtt-smarthome-connect --save`
 
 ```javascript
-const mqsh = require('mqtt-smarthome-connect');
-mqsh.connect();
-mqsh.subscribe('test/1', (topic, val) => {
-    console.log(val); // foo
+const mqsh = new MqttSmarthome('mqtt://localhost', {
+    will: {topic: 'foo/maintenance/online', payload: 'false', retain: true}
 });
-mqsh.publish('test/1', 'foo');
+
+mqsh.on('connect', () => {
+    mqsh.publish('foo/maintenance/online', true, {retain: true});
+});
+mqsh.connect();
+
+mqsh.subscribe('foo/+/bar', (topic, message, wildcardMatch, rawPacket) => {
+    console.log('received', wildcardMatch[0], message)
+});
+
+mqsh.publish('foo/boolean/bar', true);
+mqsh.publish('foo/intNumber/bar', 42);
+mqsh.publish('foo/floatNumber/bar', 3.1415);
+mqsh.publish('foo/string/bar', 'A string.');
+mqsh.publish('foo/array/bar', [1, 2, 3]);
+mqsh.publish('foo/object/bar', {val: 42, ts: Date.now()});
 ```
 
+See [examples](/examples) for more.
 
 ## API
 
