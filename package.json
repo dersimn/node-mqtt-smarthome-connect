@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dersimn/node-mqtt-smarthome.git"
+    "url": "git+https://github.com/dersimn/node-mqtt-smarthome-connect.git"
   },
   "author": "Simon Christmann <simon@christmann.email>",
   "contributors": [
