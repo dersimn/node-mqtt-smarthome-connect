@@ -39,7 +39,8 @@
     "space": 4,
     "ignore": [
       "test.js",
-      "benchmark.js"
+      "benchmark.js",
+      "examples/*"
     ]
   },
   "nyc": {
