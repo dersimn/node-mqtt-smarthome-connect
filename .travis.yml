@@ -1,8 +1,9 @@
-sudo: required
 language: node_js
 node_js:
   - '10'
+
+services:
+  - docker
+
 before_install:
-  - sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa -y
-  - sudo apt-get update -y
-  - sudo apt-get install mosquitto -y
+  - docker run -d -p 1883:1883 eclipse-mosquitto
