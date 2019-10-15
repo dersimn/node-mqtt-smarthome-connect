@@ -156,8 +156,12 @@ class MqttSmarthome extends EventEmitter {
     _parsePayload(payload) {
         try {
             return JSON.parse(payload);
-        } catch (err) {
-            return String(payload);
+        } catch {
+            try {
+                return String(payload);
+            } catch {
+                throw new Error('Unable to parse MQTT payload.');
+            }
         }
     }
 
@@ -171,6 +175,7 @@ class MqttSmarthome extends EventEmitter {
         if (!topic) {
             return null;
         }
+
         if (Array.isArray(topic)) {
             const ids = []; // Todo: clarify array or object
             topic.forEach(singleTopic => {
@@ -202,6 +207,7 @@ class MqttSmarthome extends EventEmitter {
             this.messageCallbacks[topic] = {};
             this.mqtt.subscribe(topic);
         }
+
         this.messageCallbacks[topic][id] = callback;
 
         return id;
@@ -218,13 +224,15 @@ class MqttSmarthome extends EventEmitter {
         const topic = this.callbackIds[id];
         if (topic && (typeof this.messageCallbacks[topic] === 'object')) {
             delete this.messageCallbacks[topic][id];
-            const length = Object.keys(this.messageCallbacks[topic]).length;
+            const {length} = Object.keys(this.messageCallbacks[topic]);
             if (length === 0) {
                 this.mqtt.unsubscribe(topic);
                 delete this.messageCallbacks[topic];
             }
+
             return length;
         }
+
         return 0;
     }
 
@@ -257,12 +265,14 @@ class MqttSmarthome extends EventEmitter {
         if (!topic) {
             return;
         }
+
         if (typeof options === 'function') {
             callback = options;
             options = {};
         } else {
             options = options || {};
         }
+
         Object.assign(this.globalOptions, options);
 
         const type = typeof payload;
@@ -271,6 +281,7 @@ class MqttSmarthome extends EventEmitter {
         } else if (type !== 'object') {
             payload = String(payload);
         }
+
         this.log.debug('mqtt >', topic, payload);
         this.mqtt.publish(topic, payload, options, callback);
     }

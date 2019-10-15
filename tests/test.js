@@ -1,4 +1,4 @@
-/* eslint-disable no-undef, no-unused-vars, prefer-arrow-callback, curly, capitalized-comments */
+/* eslint-disable no-unused-vars, prefer-arrow-callback, curly, capitalized-comments */
 /* global it, describe */
 
 const path = require('path');
