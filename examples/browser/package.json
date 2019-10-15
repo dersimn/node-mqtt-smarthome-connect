@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "browserify": "^16.5.0",
+    "mqtt-smarthome-connect": "0.0.8"
+  }
+}
