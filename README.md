@@ -60,7 +60,6 @@ mqsh.publish('test/1', 'foo');
     * [.unregisterCallback(id)](#MqttSmarthome+unregisterCallback) ⇒ <code>number</code>
     * [.unsubscribe(topic, [callback])](#MqttSmarthome+unsubscribe)
     * [.publish(topic, payload, [options], [callback])](#MqttSmarthome+publish)
-    * [.publishMulti(basetopic, data, [options], splitLevel)](#MqttSmarthome+publishMulti)
     * ["connect"](#MqttSmarthome+event_connect)
     * ["close"](#MqttSmarthome+event_close)
     * ["error"](#MqttSmarthome+event_error)
@@ -162,28 +161,6 @@ stringified.
     - [.dup] <code>boolean</code> <code> = false</code> - Mark as duplicate flag
 - [callback] <code>function</code> - Fired when the QoS handling completes, or at the next tick if QoS 0. An error occurs if client is disconnecting.
 
-<a name="MqttSmarthome+publishMulti"></a>
-
-### mqttSmarthome.publishMulti(basetopic, data, [options], splitLevel)
-Publish multiple messages at once. Every property value of the object data is published as a distinct message.
-The basetopic is appended by the properties name.
-
-**Kind**: instance method of [<code>MqttSmarthome</code>](#MqttSmarthome)  
-**Params**
-
-- basetopic <code>string</code>
-- data <code>object</code>
-- [options] <code>object</code> - see [publish](#MqttSmarthome+publish)
-- splitLevel <code>number</code> <code> = 1</code> - until which the data object will be split into topics
-
-**Example**  
-```js
-publishMulti('light', {hsv: {hue: 255, bri: 100; sat: 50}}, 1); // publishes 1 topic: light/hsv:{hue: 255, bri: 100; sat: 50}
-```
-**Example**  
-```js
-publishMulti('light', {hsv: {hue: 255, bri: 100; sat: 50}}, 2); // publishes 3 topics: light/hsv/hue:255; light/hsv/bri:100; light/hsv/sat: 50
-```
 <a name="MqttSmarthome+event_connect"></a>
 
 ### "connect"
